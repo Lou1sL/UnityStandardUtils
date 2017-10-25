@@ -41,7 +41,8 @@ namespace UnityStandardUtils
             streamWriter.Close();
         }
 
-        public int GetData(ref object defaultObj)
+        
+        public int GetData<T>(ref T defaultObj)
         {
             //存档不存在
             if (!File.Exists(Path + FileName))
@@ -54,7 +55,7 @@ namespace UnityStandardUtils
             //对数据进行解密，32位解密密钥
             if (PassSeed != string.Empty) data = Crypto.RijndaelDecrypt(data,Crypto.MD5(PassSeed));
             streamReader.Close();
-            defaultObj = Crypto.DeserializeObject(data, defaultObj.GetType());
+            defaultObj = (T)Crypto.DeserializeObject(data, typeof(T));
             return 0;
         }
 

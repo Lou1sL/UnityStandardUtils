@@ -5,8 +5,12 @@ using Newtonsoft.Json;
 
 namespace UnityStandardUtils
 {
+    /// <summary>
+    /// 加解密类，所有编码采用UTF8
+    /// </summary>
     public static class Crypto
     {
+
         /// <summary>
         /// Rijndael加密算法
         /// </summary>
@@ -65,7 +69,6 @@ namespace UnityStandardUtils
         /// </summary>
         /// <returns>The object.</returns>
         /// <param name="pObject">对象</param>
-        /// <param name="pType">对象类型</param>
         public static string SerializeObject(object pObject)
         {
             //序列化后的字符串
@@ -91,7 +94,11 @@ namespace UnityStandardUtils
         }
 
 
-
+        /// <summary>
+        /// 计算MD5校验值
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static string MD5(string str)
         {
             string cl = str;
@@ -107,6 +114,32 @@ namespace UnityStandardUtils
             }
             return pwd;
         }
+
+        /// <summary>
+        /// Base64编码
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Base64Encode(string str)
+        {
+            if (str == string.Empty) return string.Empty;
+            byte[] b = Encoding.UTF8.GetBytes(str);
+            return Convert.ToBase64String(b);
+        }
+
+        /// <summary>
+        /// Base64解码
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Base64Decode(string str)
+        {
+            if (str == string.Empty) return string.Empty;
+            byte[] b = Convert.FromBase64String(str);
+            return Encoding.UTF8.GetString(b);
+        }
+
+
     }
 
 

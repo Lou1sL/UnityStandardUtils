@@ -21,9 +21,9 @@ namespace UnityStandardUtils
         public static string RijndaelEncrypt(string pString, string pKey)
         {
             //密钥
-            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(pKey);
+            byte[] keyArray = Encoding.UTF8.GetBytes(pKey);
             //待加密明文数组
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(pString);
+            byte[] toEncryptArray = Encoding.UTF8.GetBytes(pString);
 
             //Rijndael解密算法
             RijndaelManaged rDel = new RijndaelManaged();
@@ -47,7 +47,7 @@ namespace UnityStandardUtils
         public static string RijndaelDecrypt(string pString, string pKey)
         {
             //解密密钥
-            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(pKey);
+            byte[] keyArray = Encoding.UTF8.GetBytes(pKey);
             //待解密密文数组
             byte[] toEncryptArray = Convert.FromBase64String(pString);
 
@@ -60,7 +60,7 @@ namespace UnityStandardUtils
 
             //返回解密后的明文
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return UTF8Encoding.UTF8.GetString(resultArray);
+            return Encoding.UTF8.GetString(resultArray);
         }
         
 

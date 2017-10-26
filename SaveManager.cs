@@ -7,19 +7,41 @@ using System.Collections.Generic;
 
 namespace UnityStandardUtils
 {
+    /// <summary>
+    /// 存档工具类
+    /// </summary>
     public class SaveManager
     {
-        
+
         private string Path;
         private string FileName;
         private string PassSeed;
 
+        public enum GetDataReturnCode
+        {
+            Success,
+            FileNotExist,
+            WrongDecryptCode,
+        }
+
+        /// <summary>
+        /// 不加密的存档保存
+        /// </summary>
+        /// <param name="path">存档路径(尾部带/)</param>
+        /// <param name="fileName">存档文件名</param>
         public SaveManager(string path, string fileName)
         {
             Path = path;
             FileName = fileName;
             PassSeed = string.Empty;
         }
+
+        /// <summary>
+        /// 支持AES加密的存档储存
+        /// </summary>
+        /// <param name="path">存档路径(尾部带/)</param>
+        /// <param name="fileName">存档文件名</param>
+        /// <param name="passSeed">密码种子</param>
         public SaveManager(string path, string fileName, string passSeed)
         {
             Path = path;
@@ -27,6 +49,10 @@ namespace UnityStandardUtils
             PassSeed = passSeed;
         }
 
+        /// <summary>
+        /// 保存存档
+        /// </summary>
+        /// <param name="pObject">数据对象</param>
         public void SetData(object pObject)
         {
             //生成存档路径
@@ -41,22 +67,37 @@ namespace UnityStandardUtils
             streamWriter.Close();
         }
 
-        
-        public int GetData<T>(ref T defaultObj)
+        /// <summary>
+        /// 读取存档
+        /// </summary>
+        /// <typeparam name="T">存档类</typeparam>
+        /// <param name="defaultObj">数据对象</param>
+        /// <returns>
+        /// </returns>
+        public GetDataReturnCode GetData<T>(ref T defaultObj)
         {
             //存档不存在
-            if (!File.Exists(Path + FileName))
-            {
-                return -1;
-            }
+            if (!File.Exists(Path + FileName)) return GetDataReturnCode.FileNotExist;
 
             StreamReader streamReader = File.OpenText(Path + FileName);
             string data = streamReader.ReadToEnd();
             //对数据进行解密，32位解密密钥
-            if (PassSeed != string.Empty) data = Crypto.RijndaelDecrypt(data,Crypto.MD5(PassSeed));
-            streamReader.Close();
-            defaultObj = (T)Crypto.DeserializeObject(data, typeof(T));
-            return 0;
+            if (PassSeed != string.Empty)
+            {
+                try
+                {
+                    data = Crypto.RijndaelDecrypt(data, Crypto.MD5(PassSeed));
+                }
+                catch (CryptographicException)
+                {
+                    //密码错误
+                    return GetDataReturnCode.WrongDecryptCode;
+                }
+            }
+                streamReader.Close();
+                defaultObj = (T)Crypto.DeserializeObject(data, typeof(T));
+
+            return GetDataReturnCode.Success;
         }
 
 

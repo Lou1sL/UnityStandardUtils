@@ -45,6 +45,7 @@ namespace Test
             SaveManager saveManagerEncrypted = new SaveManager(savePath,fileName,encryptSeed);
 
             //储存testClass1对象中的数据到文件
+
             saveManagerEncrypted.SetData(testClass1);
             //读档，读出的数据会存到testClass2的对象中
             SaveManager.GetDataReturnCode rtnCode = saveManagerEncrypted.GetData(ref testClass2);
@@ -61,9 +62,13 @@ namespace Test
             httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
-            string str = httpRequest.SendRequest();
 
+            string str = httpRequest.SendRequest();
             Console.WriteLine(str);
+
+            httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
+
+            Console.WriteLine("Download Finished");
 
             Console.ReadLine();
         }

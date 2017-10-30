@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -40,38 +41,59 @@ namespace UnityStandardUtils
                 if(!p.IsEmpty())paramPairs.Add(p);
             }
 
-            
+
             /// <summary>
             /// 发送请求，返回字符串
             /// </summary>
+            /// <param name="saveToPath">可选，保存返回二进制到文件路径</param>
             /// <returns></returns>
             public string SendRequest()
             {
                 if (URL == string.Empty) return "Error:URL didn't set";
-                
+
+                FileStream fs = new FileStream(Environment.CurrentDirectory+@"/webRequest.swap", FileMode.Create);
+
+                string res = string.Empty;
+
                 switch (requestType)
                 {
-                    case RequestType.GET:return HttpGet(URL, GetSerializedParams(requestType));
-                    case RequestType.POST:return HttpPost(URL, GetSerializedParams(requestType));
-                    default:return string.Empty;
+                    case RequestType.GET: res = HttpGet(false,URL, GetSerializedParams(requestType), ref fs); break;
+                    case RequestType.POST: res = HttpPost(false,URL, GetSerializedParams(requestType), ref fs); break;
+                    default: break;
                 }
+                
+                fs.Flush();
+                fs.Close();
+                fs.Dispose();
+
+                return res;
+
+
 
             }
 
             /// <summary>
-            /// 发送请求，输出到文件流
+            /// 下载文件
             /// </summary>
-            /// <param name="fs"></param>
-            public void SendRequest(ref FileStream fs)
+            /// <param name="path"></param>
+            public void Download(string path)
             {
                 if (URL == string.Empty) return;
+                if (path == string.Empty) return;
 
+                FileStream fs = new FileStream(path, FileMode.Create);
+                
                 switch (requestType)
                 {
-                    case RequestType.GET: return HttpGet(URL, GetSerializedParams(requestType));
-                    case RequestType.POST: return HttpPost(URL, GetSerializedParams(requestType));
-                    default: return string.Empty;
+                    case RequestType.GET: HttpGet(true,URL, GetSerializedParams(requestType), ref fs); break;
+                    case RequestType.POST: HttpPost(true,URL, GetSerializedParams(requestType), ref fs); break;
+                    default: break;
                 }
+
+                fs.Flush();
+                fs.Close();
+                fs.Dispose();
+
                 return;
             }
 
@@ -96,7 +118,13 @@ namespace UnityStandardUtils
                 return ret;
             }
 
-            private T HttpPost<T>(string Url, string postDataStr)
+            private void HttpRequestManager(string url,RequestType type,ref string response,bool isSave,ref FileStream fs)
+            {
+
+            }
+
+
+            private string HttpPost(bool isSave,string Url, string postDataStr,ref FileStream fs)
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
                 request.Method = "POST";
@@ -110,33 +138,70 @@ namespace UnityStandardUtils
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                response.Cookies = cookie.GetCookies(response.ResponseUri);
-                Stream myResponseStream = response.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
-                string retString = myStreamReader.ReadToEnd();
-                myStreamReader.Close();
-                myResponseStream.Close();
 
-                if(retString is T)return retString;
+                string retString = string.Empty;
+
+                if (isSave)
+                {
+                    ReadResponseToFileStream(ref fs, response);
+                }
+                else
+                {
+                    ReadResponseToString(ref retString, response);
+
+                }
+                
+                return retString;
             }
 
-            private string HttpGet(string Url, string postDataStr)
+            private string HttpGet(bool isSave,string Url, string postDataStr, ref FileStream fs)
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
                 request.Method = "GET";
                 request.ContentType = "text/html;charset=UTF-8";
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream myResponseStream = response.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
-                string retString = myStreamReader.ReadToEnd();
-                myStreamReader.Close();
-                myResponseStream.Close();
+
+
+                string retString = string.Empty;
+
+                if (isSave)
+                {
+                    ReadResponseToFileStream(ref fs, response);
+                }
+                else
+                {
+                    ReadResponseToString(ref retString, response);
+                }
 
                 return retString;
+                
             }
 
 
+            private void ReadResponseToFileStream(ref FileStream fs, HttpWebResponse response)
+            {
+                Stream receiveStream = response.GetResponseStream();
+
+                byte[] buffer = new byte[1024];
+                int numBytesToRead = (int)response.ContentLength;
+
+                int len = 0;
+                while ((len = receiveStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    fs.Write(buffer, 0, len);
+                }
+            }
+
+            private void ReadResponseToString(ref string str,HttpWebResponse response)
+            {
+                response.Cookies = cookie.GetCookies(response.ResponseUri);
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                str = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
+            }
 
             /// <summary>
             /// 请求类型
@@ -146,13 +211,7 @@ namespace UnityStandardUtils
                 GET,
                 POST,
             }
-
-            public enum RequestReturnCode
-            {
-                Success,
-                Failed
-            }
-
+            
 
             /// <summary>
             /// 请求参数键值对

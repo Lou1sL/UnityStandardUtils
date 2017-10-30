@@ -59,11 +59,12 @@ namespace Test
 
             Web.HttpRequest httpRequest = new Web.HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
-            httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
+            httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
 
-            string str = httpRequest.SendRequest();
+            string str = string.Empty;
+            httpRequest.SendRequest(ref str);
             Console.WriteLine(str);
 
             httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");

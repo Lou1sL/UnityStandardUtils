@@ -42,7 +42,7 @@ namespace UnityStandardUtils
 
             
             /// <summary>
-            /// 发送请求
+            /// 发送请求，返回字符串
             /// </summary>
             /// <returns></returns>
             public string SendRequest()
@@ -56,6 +56,23 @@ namespace UnityStandardUtils
                     default:return string.Empty;
                 }
 
+            }
+
+            /// <summary>
+            /// 发送请求，输出到文件流
+            /// </summary>
+            /// <param name="fs"></param>
+            public void SendRequest(ref FileStream fs)
+            {
+                if (URL == string.Empty) return;
+
+                switch (requestType)
+                {
+                    case RequestType.GET: return HttpGet(URL, GetSerializedParams(requestType));
+                    case RequestType.POST: return HttpPost(URL, GetSerializedParams(requestType));
+                    default: return string.Empty;
+                }
+                return;
             }
 
             /// <summary>
@@ -79,7 +96,7 @@ namespace UnityStandardUtils
                 return ret;
             }
 
-            private string HttpPost(string Url, string postDataStr)
+            private T HttpPost<T>(string Url, string postDataStr)
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
                 request.Method = "POST";
@@ -100,7 +117,7 @@ namespace UnityStandardUtils
                 myStreamReader.Close();
                 myResponseStream.Close();
 
-                return retString;
+                if(retString is T)return retString;
             }
 
             private string HttpGet(string Url, string postDataStr)
@@ -128,6 +145,12 @@ namespace UnityStandardUtils
             {
                 GET,
                 POST,
+            }
+
+            public enum RequestReturnCode
+            {
+                Success,
+                Failed
             }
 
 

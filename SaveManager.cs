@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 
 namespace UnityStandardUtils
@@ -84,14 +85,17 @@ namespace UnityStandardUtils
                 {
                     data = Crypto.RijndaelDecrypt(data, Crypto.MD5(PassSeed));
                 }
-                catch (CryptographicException)
+                catch (CryptographicException e)
                 {
+#if DEBUG
+                    Console.WriteLine(e);
+#endif
                     //密码错误
                     return GetDataReturnCode.WrongDecryptCode;
                 }
             }
-                streamReader.Close();
-                defaultObj = (T)Crypto.DeserializeObject(data, typeof(T));
+            streamReader.Close();
+            defaultObj = (T)Crypto.DeserializeObject(data, typeof(T));
 
             return GetDataReturnCode.Success;
         }

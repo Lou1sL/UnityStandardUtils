@@ -66,7 +66,12 @@ httpRequest.SetUrl("www.revokedstudio.com");
 httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
 httpRequest.AddParam(new Web.HttpRequest.ParamPair("name","ryubai"));
 httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
-string str = httpRequest.SendRequest();
+
+//获取返回的内容到string str
+httpRequest.SendRequest(ref str);
+//或者使用下面的函数下载到文件
+httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
+
 ```
 
 

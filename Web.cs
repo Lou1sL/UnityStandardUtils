@@ -68,8 +68,6 @@ namespace UnityStandardUtils
 
                 return status;
 
-
-
             }
 
             /// <summary>
@@ -135,7 +133,7 @@ namespace UnityStandardUtils
                 StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("utf-8"));
                 myStreamWriter.Write(postDataStr);
                 myStreamWriter.Close();
-
+                
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 response.Cookies = cookie.GetCookies(response.ResponseUri);
 
@@ -239,14 +237,6 @@ namespace UnityStandardUtils
                     return false;
                 }
             }
-
-
         }
-
-
-
-        
-
-
     }
 }

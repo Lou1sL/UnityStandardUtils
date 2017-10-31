@@ -63,7 +63,12 @@ http请求(GET/POST)：
 ```CSharp
 Web.HttpRequest httpRequest = new Web.HttpRequest();
 httpRequest.SetUrl("www.revokedstudio.com");
+
+//GET和POST方法
 httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
+//httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
+
+//参数添加
 httpRequest.AddParam(new Web.HttpRequest.ParamPair("name","ryubai"));
 httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
 

@@ -26,7 +26,7 @@ static string MD5(string str);
 ```
 
 ### SaveManager.cs
-存档功能实现
+存档功能/语言本地化实现
 
 使用方法：
 ```CSharp

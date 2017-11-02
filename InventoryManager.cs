@@ -77,6 +77,11 @@ namespace UnityStandardUtils
             GlobalItemList.Add(item);
         }
 
+        public void AddItem(Item[] items)
+        {
+            foreach (Item item in items) GlobalItemList.Add(item);
+        }
+
         /// <summary>
         /// 添加一个组合
         /// </summary>
@@ -84,6 +89,12 @@ namespace UnityStandardUtils
         public void AddCombination(Combination combination)
         {
             CombinationList.Add(combination);
+        }
+
+        public void AddCombination(Combination[] combinations)
+        {
+            foreach (Combination combination in combinations)
+                CombinationList.Add(combination);
         }
 
         /// <summary>

@@ -133,23 +133,35 @@ namespace UnityStandardUtils
                 StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("utf-8"));
                 myStreamWriter.Write(postDataStr);
                 myStreamWriter.Close();
-                
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Cookies = cookie.GetCookies(response.ResponseUri);
 
-                if (response.StatusCode != HttpStatusCode.OK) return response.StatusCode;
-
-                if (isSave)
+                HttpStatusCode rtnCode = HttpStatusCode.OK;
+                try
                 {
-                    ReadResponseToFileStream(ref fs, response);
-                }
-                else
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    rtnCode = response.StatusCode;
+
+                    response.Cookies = cookie.GetCookies(response.ResponseUri);
+
+                    if (rtnCode != HttpStatusCode.OK) return rtnCode;
+
+                    if (isSave)
+                    {
+                        ReadResponseToFileStream(ref fs, response);
+                    }
+                    else
+                    {
+                        ReadResponseToString(ref writeTo, response);
+
+                    }
+
+                    return response.StatusCode;
+                }catch(Exception e)
                 {
-                    ReadResponseToString(ref writeTo, response);
-
+#if DEBUG
+                    Console.WriteLine(e);
+#endif
+                    return rtnCode;
                 }
-
-                return response.StatusCode;
             }
 
             private HttpStatusCode HttpGet(bool isSave,string Url, string postDataStr, ref FileStream fs, ref string writeTo)

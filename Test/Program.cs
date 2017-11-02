@@ -72,8 +72,11 @@ namespace Test
             Console.WriteLine("Download Finished");
 
 
+
             //-----------
-            string[] nameArr =
+            readonly ushort TOTAL_AMOUNT = 3;
+
+            string[] nameArr = new string[TOTAL_AMOUNT]
             {
                 "Item1",
                 "Item2",
@@ -100,17 +103,22 @@ namespace Test
                 { 1,1,2 },
                 { 2,2,2 },
             };
+            
+            
 
-            //
             InventoryManager ivtMgr = new InventoryManager();
+
+            InventoryManager.Item[] itemArr;
+            
+
             InventoryManager.Item _item1 = new InventoryManager.Item("Item1","Call me item1!");
             InventoryManager.Item item1 = new InventoryManager.Item("Item1", "Call me item1!",1);
 
             InventoryManager.Bag playerBag = new InventoryManager.Bag(8,ivtMgr);
             playerBag.Push(0);
-            
 
 
+            Console.WriteLine(playerBag);
             Console.ReadLine();
         }
     }

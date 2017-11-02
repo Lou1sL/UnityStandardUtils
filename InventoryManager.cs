@@ -7,7 +7,7 @@ namespace UnityStandardUtils
 {
 
     /// <summary>
-    /// 物品栏管理
+    /// 物品管理器
     /// </summary>
     public class InventoryManager
     {
@@ -69,7 +69,7 @@ namespace UnityStandardUtils
         internal List<Combination> CombinationList = new List<Combination>();
 
         /// <summary>
-        /// 添加一个物品
+        /// 添加物品
         /// </summary>
         /// <param name="item"></param>
         public void AddItem(Item item)
@@ -81,6 +81,22 @@ namespace UnityStandardUtils
         {
             foreach (Item item in items) GlobalItemList.Add(item);
         }
+
+        public void AddItem(object[,] items)
+        {
+            for (int i = 0; i < items.GetLength(0); i++)
+            {
+                GlobalItemList.Add(new Item(items[i, 0] as string, items[i, 1] as string, (ushort)(int)items[i, 2]));
+            }
+        }
+
+        public Item GetItem(ushort posi)
+        {
+            if (posi >= GlobalItemList.Count || posi < 0) return Item.Empty;
+            return GlobalItemList[posi];
+        }
+
+
 
         /// <summary>
         /// 添加一个组合
@@ -96,6 +112,18 @@ namespace UnityStandardUtils
             foreach (Combination combination in combinations)
                 CombinationList.Add(combination);
         }
+        public void AddCombination(ushort[,] combinations)
+        {
+            for (int i = 0; i < combinations.GetLength(0); i++)
+            {
+                CombinationList.Add(new Combination
+                {
+                    MaterialA = combinations[i, 0],
+                    MaterialB = combinations[i, 1],
+                    Product = combinations[i, 2],
+                });
+            }
+        }
 
         /// <summary>
         /// 获取两个下标组合后的下标值
@@ -103,11 +131,12 @@ namespace UnityStandardUtils
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns></returns>
-        public int Combine(ushort A,ushort B)
+        private int Combine(ushort A,ushort B)
         {
             foreach(Combination combination in CombinationList)
             {
-                if (A == combination.MaterialA && B == combination.MaterialB) return combination.Product;
+                if ((A == combination.MaterialA && B == combination.MaterialB) ||
+                    (B == combination.MaterialA && A == combination.MaterialB)) return combination.Product;
             }
             return -1;
         }
@@ -128,7 +157,7 @@ namespace UnityStandardUtils
             /// </summary>
             /// <param name="capacity">包容积</param>
             /// <param name="inventoryManager">适用的物品管理器</param>
-            public Bag(ushort capacity,InventoryManager inventoryManager)
+            public Bag(ushort capacity, InventoryManager inventoryManager)
             {
                 Capacity = capacity;
                 ivtMgr = inventoryManager;
@@ -169,7 +198,17 @@ namespace UnityStandardUtils
             public bool PopByGlobalPosition(ushort positionInGlobalList)
             {
                 if (positionInGlobalList >= ivtMgr.GlobalItemList.Count) return false;
-                return Container.Remove(positionInGlobalList);
+
+                for (int i = 0; i < Container.Count; i++)
+                {
+
+                    if (Container[i] == positionInGlobalList)
+                    {
+                        Container.RemoveAt(i);
+                        --i;
+                    }
+                }
+                return true;
             }
             /// <summary>
             /// 获取包中对应位置物品
@@ -188,8 +227,9 @@ namespace UnityStandardUtils
             /// <param name="p1">物品1在包中的下标</param>
             /// <param name="p2">物品2在包中的下标</param>
             /// <returns>是否成功</returns>
-            public bool TryCombineThenPush(ushort p1,ushort p2)
+            public bool TryCombineThenPush(ushort p1, ushort p2)
             {
+                if (p1 == p2) return false;
                 if (p1 >= Container.Count || p2 >= Container.Count) return false;
                 int result = ivtMgr.Combine(Container[p1], Container[p2]);
                 if (result < 0) return false;
@@ -199,14 +239,36 @@ namespace UnityStandardUtils
                 ushort p2Weight = ivtMgr.GlobalItemList[Container[p2]].Weight;
                 ushort resultWeight = ivtMgr.GlobalItemList[result].Weight;
 
-                if (WeightCal()-p1Weight-p2Weight+resultWeight > Capacity) return false;
+                if (WeightCal() - p1Weight - p2Weight + resultWeight > Capacity) return false;
 
-                Pop(p1);
-                Pop(p2);
+                if (p2 < p1)
+                {
+                    Pop(p1);
+                    Pop(p2);
+                }
+                else
+                {
+                    Pop(p2);
+                    Pop(p1);
+                }
+                
                 Push((ushort)result);
                 return true;
             }
 
+            override
+            public string ToString()
+            {
+                string str = string.Empty;
+                foreach (ushort p in Container)
+                {
+                    str += ivtMgr.GlobalItemList[p].Name + " ";
+                }
+                str += "Capacity:" + Capacity + " ";
+                str += "Used:" + WeightCal() + " ";
+                return str;
+            }
+            
             /// <summary>
             /// 计算包当前重量
             /// </summary>

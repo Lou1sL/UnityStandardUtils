@@ -79,6 +79,64 @@ httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
 
 ```
 
+###InventoryManager.cs
+游戏内物品管理（可用于解谜游戏等）
+
+```CSharp
+const ushort TOTAL_AMOUNT = 3;
+//游戏中一共有哪些物品
+object[,] items = new object[TOTAL_AMOUNT,3]
+{
+	//物品名称 物品介绍 物品重量
+	{ "Item0","Call me item0!",1 },
+	{ "Item1","Call me item1!",1 },
+	{ "Item2","Call me item2!",1 },
+};
+
+	const ushort COMBINATION_AMOUNT = 2;
+    //根据物品数组下标制定合成表
+    ushort[,] combines = new ushort[COMBINATION_AMOUNT,3]
+    {
+		//1与2合成产出0
+        { 1,2,0 },
+        //2与0合成产出1
+        { 2,0,1 },
+    };
+            
+    //建立物品管理器对象并绑定物品及合成表
+    InventoryManager ivtMgr = new InventoryManager();
+    ivtMgr.AddItem(items);
+    ivtMgr.AddCombination(combines);
+    //建立玩家的背包对象
+    InventoryManager.Bag playerBag = new InventoryManager.Bag(8,ivtMgr);
+    //添加一些物品
+    playerBag.Push(0);
+    playerBag.Push(1);
+    playerBag.Push(1);
+    playerBag.Push(2);
+    playerBag.Push(2);
+    playerBag.Push(2);
+    Console.WriteLine(playerBag.ToString());
+    //删掉特定的物品
+    playerBag.PopByGlobalPosition(1);
+    Console.WriteLine(playerBag.ToString());
+    playerBag.Push(1);
+    Console.WriteLine(playerBag.ToString());
+    //删除背包的某项物品
+    playerBag.Pop(0);
+    Console.WriteLine(playerBag.ToString());
+    //尝试合成
+    playerBag.TryCombineThenPush(2, 3);
+    Console.WriteLine(playerBag.ToString());
+    playerBag.TryCombineThenPush(2, 1);
+    Console.WriteLine(playerBag.ToString());
+    playerBag.TryCombineThenPush(0, 1);
+    Console.WriteLine(playerBag.ToString());
+    playerBag.Pop(1);
+    Console.WriteLine(playerBag.ToString());
+
+```
+
 
 ## 引擎相关功能：（仅Unity，using UnityEngine.dll）
 	

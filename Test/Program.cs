@@ -29,7 +29,7 @@ namespace Test
 
         static void Main(string[] args)
         {
-            /***
+            /**
             //Settings
             string encryptSeed = "seed";
             string savePath = Environment.CurrentDirectory;
@@ -126,6 +126,8 @@ namespace Test
             playerBag.TryCombineThenPush(2, 1);
             Console.WriteLine(playerBag.ToString());
             playerBag.TryCombineThenPush(0, 1);
+            Console.WriteLine(playerBag.ToString());
+            playerBag.Pop(1);
             Console.WriteLine(playerBag.ToString());
 
             Console.ReadLine();

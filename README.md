@@ -79,7 +79,7 @@ httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
 
 ```
 
-###InventoryManager.cs
+### InventoryManager.cs
 
 游戏内物品管理(可用于解谜游戏等)
 

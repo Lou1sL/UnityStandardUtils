@@ -80,18 +80,20 @@ httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
 ```
 
 ###InventoryManager.cs
-游戏内物品管理（可用于解谜游戏等）
+
+游戏内物品管理(可用于解谜游戏等)
+
 
 ```CSharp
-const ushort TOTAL_AMOUNT = 3;
-//游戏中一共有哪些物品
-object[,] items = new object[TOTAL_AMOUNT,3]
-{
-	//物品名称 物品介绍 物品重量
-	{ "Item0","Call me item0!",1 },
-	{ "Item1","Call me item1!",1 },
-	{ "Item2","Call me item2!",1 },
-};
+	const ushort TOTAL_AMOUNT = 3;
+	//游戏中一共有哪些物品
+	object[,] items = new object[TOTAL_AMOUNT,3]
+	{
+		//物品名称 物品介绍 物品重量
+		{ "Item0","Call me item0!",1 },
+		{ "Item1","Call me item1!",1 },
+		{ "Item2","Call me item2!",1 },
+	};
 
 	const ushort COMBINATION_AMOUNT = 2;
     //根据物品数组下标制定合成表

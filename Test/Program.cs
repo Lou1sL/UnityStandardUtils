@@ -29,7 +29,7 @@ namespace Test
 
         static void Main(string[] args)
         {
-            /***
+            //----------SaveManager
             //Settings
             string encryptSeed = "seed";
             string savePath = Environment.CurrentDirectory;
@@ -52,13 +52,10 @@ namespace Test
             //读档，读出的数据会存到testClass2的对象中
             SaveManager.GetDataReturnCode rtnCode = saveManagerEncrypted.GetData(ref testClass2);
 
-
             Console.WriteLine("test1:"+testClass1.Int);
             Console.WriteLine("test2:"+testClass2.Int);
 
-
-            //----------
-
+            //----------Web
             Web.HttpRequest httpRequest = new Web.HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
             httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
@@ -73,11 +70,7 @@ namespace Test
 
             Console.WriteLine("Download Finished");
 
-
-
-            //-----------
-            ***/
-
+            //-----------InventoryManager
             const ushort TOTAL_AMOUNT = 3;
             //游戏中一共有哪些物品
             object[,] items = new object[TOTAL_AMOUNT,3]
@@ -129,6 +122,13 @@ namespace Test
             Console.WriteLine(playerBag.ToString());
 
             Console.ReadLine();
+
+
+            //-----------InputController
+
+
+
+
         }
     }
 }

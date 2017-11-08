@@ -121,14 +121,12 @@ namespace Test
             playerBag.TryCombineThenPush(0, 1);
             Console.WriteLine(playerBag.ToString());
 
-            Console.ReadLine();
-
-
             //-----------InputController
 
 
 
 
+            Console.ReadLine();
         }
     }
 }

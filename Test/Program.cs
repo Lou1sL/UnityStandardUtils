@@ -54,8 +54,8 @@ namespace Test
 
             Console.WriteLine("test1:"+testClass1.Int);
             Console.WriteLine("test2:"+testClass2.Int);
+            
 
-            /**
             //----------Web
             Web.HttpRequest httpRequest = new Web.HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
@@ -124,7 +124,7 @@ namespace Test
 
             //-----------InputController
             
-    **/
+
             Console.ReadLine();
         }
     }

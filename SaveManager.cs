@@ -24,11 +24,12 @@ namespace UnityStandardUtils
         /// <summary>
         /// 不加密的存档保存
         /// </summary>
-        /// <param name="path">存档路径(尾部带/)</param>
+        /// <param name="path">存档路径</param>
         /// <param name="fileName">存档文件名</param>
         public SaveManager(string path, string fileName)
         {
             Path = path;
+            if (Path[Path.Length - 1].ToString() != @"/") Path += @"/";
             FileName = fileName;
             PassSeed = string.Empty;
         }
@@ -36,12 +37,13 @@ namespace UnityStandardUtils
         /// <summary>
         /// 支持AES加密的存档储存
         /// </summary>
-        /// <param name="path">存档路径(尾部带/)</param>
+        /// <param name="path">存档路径</param>
         /// <param name="fileName">存档文件名</param>
         /// <param name="passSeed">密码种子</param>
         public SaveManager(string path, string fileName, string passSeed)
         {
             Path = path;
+            if (Path[Path.Length - 1].ToString() != @"/") Path += @"/";
             FileName = fileName;
             PassSeed = passSeed;
         }

@@ -11,7 +11,6 @@ namespace UnityStandardUtils
             public Dictionary<KeyCodeMap, KeyCode> KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
         }
         
-
         //键盘修改键位设置
         //该死的手柄(问题太多),加不加入支持将来再说
         private static Dictionary<KeyCodeMap, KeyCode> KeyCodeMapDefault = new Dictionary<KeyCodeMap, KeyCode>()
@@ -42,33 +41,7 @@ namespace UnityStandardUtils
 
         };
 
-        private static Dictionary<KeyCodeMap, KeyCode> KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>()
-        {
-            { KeyCodeMap.Pause          , KeyCode.Escape    },
-
-            { KeyCodeMap.SwitchCharactor, KeyCode.Q         },
-
-            { KeyCodeMap.Left           , KeyCode.A         },
-            { KeyCodeMap.Right          , KeyCode.D         },
-            { KeyCodeMap.Run            , KeyCode.LeftShift },
-
-            { KeyCodeMap.Interact       , KeyCode.E         },
-            { KeyCodeMap.Invent         , KeyCode.Tab       },
-
-            { KeyCodeMap.Torch          , KeyCode.LeftAlt   },
-            { KeyCodeMap.HIH            , KeyCode.F         },
-            //Xiaoai
-            { KeyCodeMap.Crouch         , KeyCode.C         },
-            //Xiaofan
-            { KeyCodeMap.ClimbUp        , KeyCode.W         },
-            { KeyCodeMap.ClimbDown      , KeyCode.S         },
-            { KeyCodeMap.Jump           , KeyCode.Space     },
-
-            { KeyCodeMap.GunMode        , KeyCode.Mouse1    },
-            { KeyCodeMap.Shoot          , KeyCode.Mouse0    },
-            { KeyCodeMap.Reload         , KeyCode.R         },
-
-        };
+        private static Dictionary<KeyCodeMap, KeyCode> KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
 
         public enum KeyCodeMap
         {
@@ -99,11 +72,12 @@ namespace UnityStandardUtils
             Release,
             On
         }
+
         //获取按键状态
-        public static bool getKey(KeyStatus ks, KeyCodeMap kc)
+        public static bool GetKey(KeyStatus ks, KeyCodeMap kc)
         {
             KeyCode inputKey;
-            bool isContainThisKey = KeyCodeSet.TryGetValue(kc, out inputKey);
+            bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
             bool result = false;
 
             if (isContainThisKey)
@@ -119,45 +93,45 @@ namespace UnityStandardUtils
             return result;
         }
         //获得功能对应键
-        public static KeyCode getKeyCodeByMap(KeyCodeMap kc)
+        public static KeyCode GetKeyCodeByMap(KeyCodeMap kc)
         {
             KeyCode inputKey;
-            bool isContainThisKey = KeyCodeSet.TryGetValue(kc, out inputKey);
+            bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
             return inputKey;
         }
         //设置功能对应键
-        public static bool setKeyCodeByMap(KeyCode k, KeyCodeMap kc)
+        public static bool SetKeyCodeByMap(KeyCode k, KeyCodeMap kc)
         {
 
-            bool isContainThisValue = KeyCodeSet.ContainsValue(k);
+            bool isContainThisValue = KeyCodeSetMap.ContainsValue(k);
             if (isContainThisValue) return false;
 
-            KeyCodeSet[kc] = k;
+            KeyCodeSetMap[kc] = k;
             return true;
         }
         //设置默认
-        public static void setToDefault()
+        public static void SetToDefault()
         {
-            KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
+            KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
         }
         //储存
-        public static void saveSettings(string path)
+        public static void SaveSettings()
         {
             InputSetting setting = new InputSetting();
-            setting.KeyCodeSet = KeyCodeSet;
+            setting.KeyCodeSet = KeyCodeSetMap;
 
-            SaveManager settingSaved = new SaveManager(path,"InputSetting.save");
+            SaveManager settingSaved = new SaveManager(Application.persistentDataPath,"InputSetting.save");
             settingSaved.SetData(setting);
         }
         //读取
-        public static void loadSettings(string path)
+        public static void LoadSettings()
         {
             InputSetting setting = new InputSetting();
 
-            SaveManager settingSaved = new SaveManager(path, "InputSetting.save");
+            SaveManager settingSaved = new SaveManager(Application.persistentDataPath, "InputSetting.save");
             settingSaved.GetData(ref setting);
 
-            KeyCodeSet = setting.KeyCodeSet;
+            KeyCodeSetMap = setting.KeyCodeSet;
         }
 
     }

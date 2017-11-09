@@ -33,7 +33,7 @@ namespace Test
             //Settings
             string encryptSeed = "seed";
             string savePath = Environment.CurrentDirectory;
-            string fileName = @"/SaveTest";
+            string fileName = "SaveTest";
 
             // 假设某任意结构存档类型为TestClass(类名，结构均不限)
             TestClass testClass1 = new TestClass();
@@ -55,6 +55,7 @@ namespace Test
             Console.WriteLine("test1:"+testClass1.Int);
             Console.WriteLine("test2:"+testClass2.Int);
 
+            /**
             //----------Web
             Web.HttpRequest httpRequest = new Web.HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
@@ -122,10 +123,8 @@ namespace Test
             Console.WriteLine(playerBag.ToString());
 
             //-----------InputController
-
-
-
-
+            
+    **/
             Console.ReadLine();
         }
     }

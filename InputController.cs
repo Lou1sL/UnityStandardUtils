@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityStandardUtils
 {
-    public class InputController:MonoBehaviour
+    public class InputController
     {
         public class InputSetting
         {
@@ -68,12 +68,26 @@ namespace UnityStandardUtils
 
         public enum KeyStatus
         {
+            /// <summary>
+            /// 按下瞬间的状态
+            /// </summary>
             Push,
+            /// <summary>
+            /// 松开瞬间的状态
+            /// </summary>
             Release,
+            /// <summary>
+            /// 在被按住的状态
+            /// </summary>
             On
         }
 
-        //获取按键状态
+        /// <summary>
+        /// 判断一个功能的对应键是否处于某个状态
+        /// </summary>
+        /// <param name="ks">状态</param>
+        /// <param name="kc">功能</param>
+        /// <returns></returns>
         public static bool GetKey(KeyStatus ks, KeyCodeMap kc)
         {
             KeyCode inputKey;
@@ -92,14 +106,23 @@ namespace UnityStandardUtils
             }
             return result;
         }
-        //获得功能对应键
+        /// <summary>
+        /// 获取当前设置下某功能对应的按键
+        /// </summary>
+        /// <param name="kc"></param>
+        /// <returns></returns>
         public static KeyCode GetKeyCodeByMap(KeyCodeMap kc)
         {
             KeyCode inputKey;
             bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
             return inputKey;
         }
-        //设置功能对应键
+        /// <summary>
+        /// 设置某功能的对应键位
+        /// </summary>
+        /// <param name="k">按键</param>
+        /// <param name="kc">功能</param>
+        /// <returns>是否成功（如果该键已被使用则返回false）</returns>
         public static bool SetKeyCodeByMap(KeyCode k, KeyCodeMap kc)
         {
 
@@ -109,12 +132,16 @@ namespace UnityStandardUtils
             KeyCodeSetMap[kc] = k;
             return true;
         }
-        //设置默认
+        /// <summary>
+        /// 将当前配置还原成默认键位
+        /// </summary>
         public static void SetToDefault()
         {
             KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
         }
-        //储存
+        /// <summary>
+        /// 储存当前配置到存档文件
+        /// </summary>
         public static void SaveSettings()
         {
             InputSetting setting = new InputSetting();
@@ -123,7 +150,9 @@ namespace UnityStandardUtils
             SaveManager settingSaved = new SaveManager(Application.persistentDataPath,"InputSetting.save");
             settingSaved.SetData(setting);
         }
-        //读取
+        /// <summary>
+        /// 从存档文件中读取配置
+        /// </summary>
         public static void LoadSettings()
         {
             InputSetting setting = new InputSetting();

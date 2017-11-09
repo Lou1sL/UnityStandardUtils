@@ -80,7 +80,6 @@ httpRequest.Download(Environment.CurrentDirectory + @"/saved.html");
 ```
 
 ### InventoryManager.cs
-
 游戏内物品管理(可用于解谜游戏等)
 
 
@@ -141,7 +140,25 @@ Console.WriteLine(playerBag.ToString());
 
 
 ## 引擎相关功能：（仅Unity，using UnityEngine.dll）
-	
+由于引擎原因，这里的代码不能在控制台测试，请在游戏脚本中使用
+
+### InputController.cs
+键位管理器
+#### !!! 请先修改KeyCodeMap(功能键)和KeyCodeMapDefault(功能键对应的默认键设置)再打包dll !!!
+
+```CSharp
+//读取设置文件到当前配置
+InputController.LoadSettings();
+//设定Pause功能为P键
+InputController.SetKeyCodeByMap(KeyCode.P, InputController.KeyCodeMap.Pause);
+//设定当前全部功能回到默认配置
+InputController.SetToDefault();
+//保存当前配置到配置文件
+InputController.SaveSettings();
+//获得Pause功能对应的按键
+KeyCode pauseCode = InputController.GetKeyCodeByMap(InputController.KeyCodeMap.Pause);
+//判断Pause功能对应按键是否刚刚按下
+bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, InputController.KeyCodeMap.Pause);
 
 
-
+```

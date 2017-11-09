@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 
 using UnityStandardUtils;
+using UnityEngine;
 
 namespace Test
 {
@@ -122,9 +123,22 @@ namespace Test
             playerBag.TryCombineThenPush(0, 1);
             Console.WriteLine(playerBag.ToString());
 
+            /**
             //-----------InputController
-            
+            //读取设置文件到当前配置
+            InputController.LoadSettings();
+            //设定Pause功能为P键
+            InputController.SetKeyCodeByMap(KeyCode.P, InputController.KeyCodeMap.Pause);
+            //设定当前全部功能回到默认配置
+            InputController.SetToDefault();
+            //保存当前配置到配置文件
+            InputController.SaveSettings();
+            //获得Pause功能对应的按键
+            KeyCode pauseCode = InputController.GetKeyCodeByMap(InputController.KeyCodeMap.Pause);
+            //判断Pause功能对应按键是否刚刚按下
+            bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, InputController.KeyCodeMap.Pause);
 
+            **/
             Console.ReadLine();
         }
     }

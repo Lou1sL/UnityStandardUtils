@@ -106,7 +106,7 @@ namespace UnityStandardUtils
                 fs.Close();
                 fs.Dispose();
 
-                if (status.exception == null) try { File.Delete(path); }catch(Exception e) { }
+                if (status.exception != null) try { File.Delete(path); }catch(Exception e) { }
 
                 return status;
             }

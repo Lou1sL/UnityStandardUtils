@@ -60,7 +60,7 @@ namespace Test
             //----------Web
             Web.HttpRequest httpRequest = new Web.HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
-            httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
+            httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
             httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
 

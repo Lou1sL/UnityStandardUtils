@@ -25,6 +25,7 @@ namespace Test
 
         static void Main(string[] args)
         {
+            /**
             //----------SaveManager
             //Settings
             string encryptSeed = "seed";
@@ -134,7 +135,49 @@ namespace Test
             bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, InputController.KeyCodeMap.Pause);
 
             **/
+
+            //随机数生成器
+            RandomGenerator random = new RandomGenerator();
+            double[] res = new double[1000];
+            
+            double min = 0;
+            double max = 1;
+            //平均分布
+            for (int i = 0; i < res.Length; i++) res[i] = random.AverageRandom(min, max);
+            Array.Sort(res);
+            //WriteScr(res);
+
+            double lambda = 1;
+            //指数分布
+            for (int i = 0; i < res.Length; i++) res[i] = random.ExponentialDist(lambda);
+            Array.Sort(res);
+            //WriteScr(res);
+            //负指数分布
+            for (int i = 0; i < res.Length; i++) res[i] = random.NegativeExponentialDist(lambda);
+            Array.Sort(res);
+            //WriteScr(res);
+
+            double miu = 0.001;
+            double sigma = 0.2;
+            //正态分布
+            for (int i = 0; i < res.Length; i++) res[i] = random.GaussianDist(miu, sigma, min, max)*10;
+            Array.Sort(res);
+            WriteScr(res);
+            
             Console.ReadLine();
+        }
+        
+        private static void WriteScr<T>(T[] arr)
+        {
+            int lastNum = 0;
+            foreach (T num in arr)
+            {
+                int thisNum = (int)(double)(object)num;
+                if (thisNum != lastNum) Console.WriteLine();
+                Console.Write(thisNum + " ");
+                lastNum = thisNum;
+            }
+            Console.Write("\n\n\n");
         }
     }
 }

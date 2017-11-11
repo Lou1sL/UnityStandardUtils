@@ -5,7 +5,7 @@ namespace UnityStandardUtils
     /// <summary>
     /// 服从特定数学模型下的随机数生成器
     /// </summary>
-    class RandomGenerator
+    public class RandomGenerator
     {
         static Random aa = new Random((int)(DateTime.Now.Ticks / 10000));
         /// <summary>
@@ -48,7 +48,6 @@ namespace UnityStandardUtils
             return 1.0 / (x * Math.Sqrt(2 * Math.PI) * sigma) * Math.Exp(-1 * (Math.Log(x) - miu) * (Math.Log(x) - miu) / (2 * sigma * sigma));
         }
 
-
         /// <summary>
         /// 指数分布
         /// </summary>
@@ -74,7 +73,6 @@ namespace UnityStandardUtils
             return randres;
         }
 
-        
         Random ran;
         public RandomGenerator()
         {
@@ -92,9 +90,7 @@ namespace UnityStandardUtils
                 dec = ran.NextDouble();
             return -Math.Log(dec) / lambda;
         }
-
-
-
+        
         /// <summary>
         /// 泊松分布
         /// </summary>

@@ -20,6 +20,7 @@ namespace UnityStandardUtils
             private RequestType requestType = RequestType.GET;
             private List<ParamPair> paramPairs = new List<ParamPair>();
             private CookieContainer cookie = new CookieContainer();
+            public string SwapFileLocation = Environment.CurrentDirectory + @"/webRequest.swap";
 
             public void SetUrl(string url)
             {
@@ -45,15 +46,19 @@ namespace UnityStandardUtils
             /// <summary>
             /// 发送请求，返回字符串
             /// </summary>
-            /// <param name="saveToPath">可选，保存返回二进制到文件路径</param>
+            /// <param name="data">返回的字符串</param>
             /// <returns></returns>
-            public HttpStatusCode SendRequest(ref string data)
+            public ReturnStatus SendRequest(ref string data)
             {
-                if (URL == string.Empty) return HttpStatusCode.NotFound;
+                ReturnStatus status = new ReturnStatus();
 
-                FileStream fs = new FileStream(Environment.CurrentDirectory+@"/webRequest.swap", FileMode.Create);
+                if (URL == string.Empty)
+                {
+                    status.exception = new ArgumentNullException();
+                    return status;
+                }
 
-                HttpStatusCode status = HttpStatusCode.OK;
+                FileStream fs = new FileStream(SwapFileLocation, FileMode.Create);
                 
                 switch (requestType)
                 {
@@ -66,6 +71,9 @@ namespace UnityStandardUtils
                 fs.Close();
                 fs.Dispose();
 
+                try { File.Delete(SwapFileLocation); } catch (Exception e) { }
+
+
                 return status;
 
             }
@@ -73,15 +81,18 @@ namespace UnityStandardUtils
             /// <summary>
             /// 下载文件
             /// </summary>
-            /// <param name="path"></param>
-            public HttpStatusCode Download(string path)
+            /// <param name="path">文件下载的路径及文件名</param>
+            public ReturnStatus Download(string path)
             {
-                if (URL == string.Empty) return HttpStatusCode.NotFound;
-                if (path == string.Empty) return HttpStatusCode.NotFound;
+                ReturnStatus status = new ReturnStatus();
+
+                if (URL == string.Empty || path == string.Empty)
+                {
+                    status.exception = new ArgumentNullException();
+                    return status;
+                }
 
                 FileStream fs = new FileStream(path, FileMode.Create);
-
-                HttpStatusCode status = HttpStatusCode.OK;
 
                 string str = string.Empty;
                 switch (requestType)
@@ -94,6 +105,8 @@ namespace UnityStandardUtils
                 fs.Flush();
                 fs.Close();
                 fs.Dispose();
+
+                if (status.exception == null) try { File.Delete(path); }catch(Exception e) { }
 
                 return status;
             }
@@ -120,29 +133,25 @@ namespace UnityStandardUtils
             }
             
 
-            private HttpStatusCode HttpPost(bool isSave,string Url, string postDataStr,ref FileStream fs,ref string writeTo)
+            private ReturnStatus HttpPost(bool isSave,string Url, string postDataStr,ref FileStream fs,ref string writeTo)
             {
-                
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                //总是小3？？？
-                //request.ContentLength = Encoding.UTF8.GetByteCount(postDataStr);
-                request.CookieContainer = cookie;
-                Stream myRequestStream = request.GetRequestStream();
-                StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("utf-8"));
-                myStreamWriter.Write(postDataStr);
-                myStreamWriter.Close();
+                ReturnStatus status = new ReturnStatus();
 
-                HttpStatusCode rtnCode = HttpStatusCode.OK;
                 try
                 {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    //总是小3？？？
+                    //request.ContentLength = Encoding.UTF8.GetByteCount(postDataStr);
+                    request.CookieContainer = cookie;
+                    Stream myRequestStream = request.GetRequestStream();
+                    StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("utf-8"));
+                    myStreamWriter.Write(postDataStr);
+                    myStreamWriter.Close();
+
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    rtnCode = response.StatusCode;
-
                     response.Cookies = cookie.GetCookies(response.ResponseUri);
-
-                    if (rtnCode != HttpStatusCode.OK) return rtnCode;
 
                     if (isSave)
                     {
@@ -151,41 +160,54 @@ namespace UnityStandardUtils
                     else
                     {
                         ReadResponseToString(ref writeTo, response);
-
                     }
 
-                    return response.StatusCode;
-                }catch(Exception e)
+                    status.statusCode = response.StatusCode;
+                }
+                catch(Exception e)
                 {
+                    status.exception = e;
 #if DEBUG
                     Console.WriteLine(e);
 #endif
-                    return rtnCode;
                 }
+                return status;
             }
 
-            private HttpStatusCode HttpGet(bool isSave,string Url, string postDataStr, ref FileStream fs, ref string writeTo)
+            private ReturnStatus HttpGet(bool isSave,string Url, string postDataStr, ref FileStream fs, ref string writeTo)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
-                request.Method = "GET";
-                request.ContentType = "text/html;charset=UTF-8";
 
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Cookies = cookie.GetCookies(response.ResponseUri);
+                ReturnStatus status = new ReturnStatus();
 
-                if (response.StatusCode != HttpStatusCode.OK) return response.StatusCode;
-
-                if (isSave)
+                try
                 {
-                    ReadResponseToFileStream(ref fs, response);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == "" ? "" : "?") + postDataStr);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    response.Cookies = cookie.GetCookies(response.ResponseUri);
+
+                    if (isSave)
+                    {
+                        ReadResponseToFileStream(ref fs, response);
+                    }
+                    else
+                    {
+                        ReadResponseToString(ref writeTo, response);
+                    }
+
+                    status.statusCode = response.StatusCode;
                 }
-                else
+                catch(Exception e)
                 {
-                    ReadResponseToString(ref writeTo, response);
+                    status.exception = e;
+#if DEBUG
+                    Console.WriteLine(e);
+#endif
                 }
 
-                return response.StatusCode;
-                
+                return status;
             }
 
 
@@ -225,7 +247,7 @@ namespace UnityStandardUtils
             /// <summary>
             /// 请求参数键值对
             /// </summary>
-            public class ParamPair
+            public sealed class ParamPair
             {
                 private string LeftVal;
                 private string RightVal;
@@ -248,6 +270,12 @@ namespace UnityStandardUtils
 
                     return false;
                 }
+            }
+
+            public sealed class ReturnStatus
+            {
+                public HttpStatusCode statusCode = HttpStatusCode.ExpectationFailed;
+                public Exception exception = null;
             }
         }
     }

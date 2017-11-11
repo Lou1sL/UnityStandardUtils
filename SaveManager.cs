@@ -7,7 +7,7 @@ namespace UnityStandardUtils
     /// <summary>
     /// 存档工具类
     /// </summary>
-    public class SaveManager
+    public sealed class SaveManager
     {
 
         private string Path;

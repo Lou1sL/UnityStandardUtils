@@ -13,7 +13,7 @@ namespace UnityStandardUtils
         /// <summary>
         /// 标准Http请求
         /// </summary>
-        public class HttpRequest
+        public sealed class HttpRequest
         {
             
             private string URL = string.Empty;
@@ -106,7 +106,7 @@ namespace UnityStandardUtils
                 fs.Close();
                 fs.Dispose();
 
-                if (status.exception != null) try { File.Delete(path); }catch(Exception e) { }
+                if (!status.IsSuccess()) try { File.Delete(path); }catch(Exception e) { }
 
                 return status;
             }
@@ -276,6 +276,12 @@ namespace UnityStandardUtils
             {
                 public HttpStatusCode statusCode = HttpStatusCode.ExpectationFailed;
                 public Exception exception = null;
+
+                public bool IsSuccess()
+                {
+                    if (exception == null && statusCode == HttpStatusCode.OK) return true;
+                    return false;
+                }
             }
         }
     }

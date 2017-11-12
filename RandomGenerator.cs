@@ -21,7 +21,10 @@ namespace UnityStandardUtils
             int resultInteger = aa.Next(MINnteger, MAXnteger);
             return resultInteger / 10000.0;
         }
-
+        public int AverageRandom(int min, int max)
+        {
+            return aa.Next(min, max);
+        }
         /// <summary>
         /// 正态分布
         /// </summary>
@@ -111,6 +114,13 @@ namespace UnityStandardUtils
             }
             return count;
         }
+
+        public DateTime RandomDate(DateTime min,DateTime max)
+        {
+            int rangeSecound = (int)(max - min).TotalSeconds;
+            return min.AddSeconds(AverageRandom(0, rangeSecound));
+        }
+
 
     }
 }

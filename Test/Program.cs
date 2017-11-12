@@ -135,7 +135,7 @@ namespace Test
             bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, InputController.KeyCodeMap.Pause);
 
             **/
-
+            /***
             //随机数生成器
             RandomGenerator random = new RandomGenerator();
             double[] res = new double[1000];
@@ -163,7 +163,10 @@ namespace Test
             for (int i = 0; i < res.Length; i++) res[i] = random.GaussianDist(miu, sigma, min, max)*10;
             Array.Sort(res);
             WriteScr(res);
-            
+
+            **/
+            RandomGenerator random = new RandomGenerator();
+            Console.Write(random.RandomDate(Convert.ToDateTime("2007-1-1"), Convert.ToDateTime("2008-1-1")));
             Console.ReadLine();
         }
         

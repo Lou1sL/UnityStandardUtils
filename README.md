@@ -73,7 +73,29 @@ Console.WriteLine(localization.Call("LOGO_SKIP"));
 localization.SetLanguage("zh-TW");
 Console.WriteLine(localization.Call("LOGO_SKIP"));
 Console.ReadLine();
+```
+本地化文档（储存在 ../Localization/ 下）
 
+zh-CN.xml
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<Localization language="中文(简体)">
+	<LOGO_SKIP str="空格  跳过"/>
+</Localization>
+```
+zh-TW.xml
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<Localization language="中文(繁體)">
+	<LOGO_SKIP str="空格  跳過"/>
+</Localization>
+```
+en-US.xml
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<Localization language="English">
+	<LOGO_SKIP str="Skip: Press Space"/>
+</Localization>
 ```
 
 

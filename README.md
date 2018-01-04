@@ -26,7 +26,7 @@ static string MD5(string str);
 ```
 
 ### SaveManager.cs
-存档功能/语言本地化实现
+存档功能实现
 
 使用方法：
 ```CSharp
@@ -55,6 +55,27 @@ new SaveManager("SavePath", "FileName").SetData(testClass1);
 TestClass testClass2 = new TestClass();
 SaveManager.GetDataReturnCode res = new SaveManager("SavePath", "FileName").GetData(ref testClass2);
 ```
+
+
+### Localization.cs
+语言本地化
+
+```CSharp
+Localization localization = new Localization(Environment.CurrentDirectory + "/Localization/","en-US");
+foreach(Localization.LanguageSet set in localization.GetAllSupportedLanguages)
+{
+	Console.WriteLine(set.FileName+":"+set.Language);
+}
+Console.WriteLine();
+Console.WriteLine(localization.Call("LOGO_SKIP"));
+localization.SetLanguage("zh-CN");
+Console.WriteLine(localization.Call("LOGO_SKIP"));
+localization.SetLanguage("zh-TW");
+Console.WriteLine(localization.Call("LOGO_SKIP"));
+Console.ReadLine();
+
+```
+
 
 ### Web.cs
 网络相关

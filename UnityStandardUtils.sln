@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 		{F096A8E5-BDCF-4717-9C0A-DB3108F1AC98} = {F096A8E5-BDCF-4717-9C0A-DB3108F1AC98}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationEditor", "LocalizationEditor\LocalizationEditor.csproj", "{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,18 @@ Global
 		{97AD13E2-A7EA-4CA8-BE67-5CC0FAD38204}.Release|x64.Build.0 = Release|Any CPU
 		{97AD13E2-A7EA-4CA8-BE67-5CC0FAD38204}.Release|x86.ActiveCfg = Release|Any CPU
 		{97AD13E2-A7EA-4CA8-BE67-5CC0FAD38204}.Release|x86.Build.0 = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|x64.Build.0 = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|x86.Build.0 = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|x64.ActiveCfg = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|x64.Build.0 = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|x86.ActiveCfg = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -45,6 +45,7 @@
     <Compile Include="Crypto.cs" />
     <Compile Include="InputController.cs" />
     <Compile Include="InventoryManager.cs" />
+    <Compile Include="Localization.cs" />
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="SaveManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -25,20 +25,18 @@ namespace Test
 
         static void Main(string[] args)
         {
+            Localization.Init(Environment.CurrentDirectory + "/Localization/", "en-US");
 
-            Localization localization = new Localization(Environment.CurrentDirectory + "/Localization/","en-US");
+            foreach(Localization.LanguageSet set in Localization.GetAllSupportedLanguages)
+                Console.WriteLine(set);
 
-            foreach(Localization.LanguageSet set in localization.GetAllSupportedLanguages)
-            {
-                Console.WriteLine(set.FileName+":"+set.Language);
-            }
-
-            Console.WriteLine();
-            Console.WriteLine(localization.Call("LOGO_SKIP"));
-            localization.SetLanguage("zh-CN");
-            Console.WriteLine(localization.Call("LOGO_SKIP"));
-            localization.SetLanguage("zh-TW");
-            Console.WriteLine(localization.Call("LOGO_SKIP"));
+            Console.WriteLine(Localization.Call("LOGO_SKIP"));
+            Localization.SetLanguage("zh-CN");
+            Console.WriteLine(Localization.Call("LOGO_SKIP"));
+            Localization.SetLanguage("zh-TW");
+            Console.WriteLine(Localization.Call("LOGO_SKIP"));
+            //错误的id call不会触发异常，但会返回TextCallFailed!
+            Console.WriteLine(Localization.Call("LOGO_SKIPzzz"));
             Console.ReadLine();
         }
         

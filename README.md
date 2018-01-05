@@ -9,7 +9,7 @@ Unity基础工具库
 ## 引擎无关功能：（高复用，无关UnityEngine.dll）
 
 ### Crypto.cs
-加密相关工具函数，全部static
+加密相关工具函数
 
 ```CSharp
 //AES加解密
@@ -58,20 +58,19 @@ SaveManager.GetDataReturnCode res = new SaveManager("SavePath", "FileName").GetD
 
 
 ### Localization.cs
-语言本地化
+语言本地化，基于XML的多国语言支持
 
 ```CSharp
-Localization localization = new Localization(Environment.CurrentDirectory + "/Localization/","en-US");
-foreach(Localization.LanguageSet set in localization.GetAllSupportedLanguages)
-{
-	Console.WriteLine(set.FileName+":"+set.Language);
-}
-Console.WriteLine();
-Console.WriteLine(localization.Call("LOGO_SKIP"));
-localization.SetLanguage("zh-CN");
-Console.WriteLine(localization.Call("LOGO_SKIP"));
-localization.SetLanguage("zh-TW");
-Console.WriteLine(localization.Call("LOGO_SKIP"));
+Localization.Init(Environment.CurrentDirectory + "/Localization/", "en-US");
+foreach(Localization.LanguageSet set in Localization.GetAllSupportedLanguages)
+	Console.WriteLine(set);
+Console.WriteLine(Localization.Call("LOGO_SKIP"));
+Localization.SetLanguage("zh-CN");
+Console.WriteLine(Localization.Call("LOGO_SKIP"));
+Localization.SetLanguage("zh-TW");
+Console.WriteLine(Localization.Call("LOGO_SKIP"));
+//错误的id call不会触发异常，但会返回TextCallFailed!
+Console.WriteLine(Localization.Call("LOGO_SKIPzzz"));
 Console.ReadLine();
 ```
 本地化文档（储存在 ../Localization/ 下）

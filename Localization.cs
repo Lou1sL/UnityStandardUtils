@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace UnityStandardUtils
 {
-    public class Localization
+    public static class Localization
     {
         private static string Extension = ".xml";
 
@@ -15,7 +15,19 @@ namespace UnityStandardUtils
         private static LanguageSet CurrentLanguage;
 
 
-        public Localization(string folder,string defaultFile)
+        static Localization()
+        {
+            try
+            {
+                Init(Environment.CurrentDirectory + "/Localization/", "zh-CN");
+            }catch(Exception e)
+            {
+                Console.WriteLine("Localization default Init FAILED\nPlease Init manually:)\n"+e.Message);
+            }
+            
+        }
+
+        public static void Init(string folder,string defaultFile)
         {
             AllSet = new List<LanguageSet>();
             CurrentLanguage = new LanguageSet();
@@ -38,11 +50,11 @@ namespace UnityStandardUtils
                     AllSet.Add(set);
                 }
             }
-
+            
             SetLanguage(defaultFile);
         }
 
-        public List<LanguageSet> GetAllSupportedLanguages
+        public static List<LanguageSet> GetAllSupportedLanguages
         {
             get
             {
@@ -50,16 +62,17 @@ namespace UnityStandardUtils
             }
         }
 
-        public void SetLanguage(string filename)
+        public static void SetLanguage(string filename)
         {
             foreach(LanguageSet set in AllSet)
             {
                 if (set.FileName == filename)
                 {
                     CurrentLanguage = set;
-                    break;
+                    return;
                 }
             }
+            throw new FileNotFoundException();
         }
 
         public struct LanguageSet
@@ -67,12 +80,23 @@ namespace UnityStandardUtils
             public string FileName;
             public string Language;
             public XmlNode Data;
+
+            public override string ToString()
+            {
+                return FileName + " : " + Language;
+            }
         }
 
         
-        public string Call(string id)
+        public static string Call(string id)
         {
-            return CurrentLanguage.Data.SelectSingleNode(id).Attributes["str"].Value;
+            try
+            {
+                return CurrentLanguage.Data.SelectSingleNode(id).Attributes["str"].Value;
+            }catch(Exception e)
+            {
+                return "TextCallFailed!@" + e.Message;
+            }
         }
         
     }

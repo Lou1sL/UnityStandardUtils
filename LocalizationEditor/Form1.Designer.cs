@@ -29,8 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.returnStatusBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.DataView = new System.Windows.Forms.DataGridView();
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Ori = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Tra = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.LOAD_ORI = new System.Windows.Forms.Button();
             this.LOAD_TRA = new System.Windows.Forms.Button();
@@ -43,9 +47,8 @@
             this.LANG_TRA = new System.Windows.Forms.Label();
             this.MSG = new System.Windows.Forms.Label();
             this.Hint = new System.Windows.Forms.Label();
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Ori = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Tra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsOriEditable = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.returnStatusBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataView)).BeginInit();
             this.SuspendLayout();
@@ -56,6 +59,7 @@
             // 
             // DataView
             // 
+            this.DataView.AllowUserToResizeRows = false;
             this.DataView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.DataView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -67,6 +71,21 @@
             this.DataView.RowTemplate.Height = 23;
             this.DataView.Size = new System.Drawing.Size(893, 374);
             this.DataView.TabIndex = 0;
+            // 
+            // Col_ID
+            // 
+            this.Col_ID.HeaderText = "ID(不可留空)";
+            this.Col_ID.Name = "Col_ID";
+            // 
+            // Col_Ori
+            // 
+            this.Col_Ori.HeaderText = "原文";
+            this.Col_Ori.Name = "Col_Ori";
+            // 
+            // Col_Tra
+            // 
+            this.Col_Tra.HeaderText = "译文";
+            this.Col_Tra.Name = "Col_Tra";
             // 
             // openFileDialog1
             // 
@@ -179,27 +198,42 @@
             this.Hint.Size = new System.Drawing.Size(77, 12);
             this.Hint.TabIndex = 12;
             this.Hint.Text = "程序已启动！";
+            this.Hint.Click += new System.EventHandler(this.Hint_Click);
             // 
-            // Col_ID
+            // IsOriEditable
             // 
-            this.Col_ID.HeaderText = "ID(不可留空)";
-            this.Col_ID.Name = "Col_ID";
+            this.IsOriEditable.AutoSize = true;
+            this.IsOriEditable.Checked = true;
+            this.IsOriEditable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsOriEditable.Location = new System.Drawing.Point(243, 22);
+            this.IsOriEditable.Name = "IsOriEditable";
+            this.IsOriEditable.Size = new System.Drawing.Size(84, 16);
+            this.IsOriEditable.TabIndex = 13;
+            this.IsOriEditable.Text = "可编辑原文";
+            this.IsOriEditable.UseVisualStyleBackColor = true;
+            this.IsOriEditable.CheckedChanged += new System.EventHandler(this.IsOriEditable_CheckedChanged);
             // 
-            // Col_Ori
+            // linkLabel1
             // 
-            this.Col_Ori.HeaderText = "原文";
-            this.Col_Ori.Name = "Col_Ori";
-            // 
-            // Col_Tra
-            // 
-            this.Col_Tra.HeaderText = "译文";
-            this.Col_Tra.Name = "Col_Tra";
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Font = new System.Drawing.Font("Adobe Gothic Std B", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkLabel1.Location = new System.Drawing.Point(7, 22);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(227, 30);
+            this.linkLabel1.TabIndex = 14;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "UnityStandardUtils";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(917, 510);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.IsOriEditable);
             this.Controls.Add(this.Hint);
             this.Controls.Add(this.MSG);
             this.Controls.Add(this.LANG_TRA);
@@ -212,6 +246,8 @@
             this.Controls.Add(this.LOAD_TRA);
             this.Controls.Add(this.LOAD_ORI);
             this.Controls.Add(this.DataView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "本地化编辑器";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -240,6 +276,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Ori;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Tra;
+        private System.Windows.Forms.CheckBox IsOriEditable;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 

@@ -33,8 +33,10 @@ namespace LocalizationEditor
         public static List<Editor.LocalizationDataPair> GetOriData(DataGridView view)
         {
             List<Editor.LocalizationDataPair> ldp = new List<Editor.LocalizationDataPair>();
-            
-            for(int i = 0; i < view.RowCount-1; i++)
+
+            int TotalRowCount = (view.AllowUserToAddRows) ? view.RowCount - 1 : view.RowCount;
+
+            for(int i = 0; i < TotalRowCount; i++)
             {
                 Editor.LocalizationDataPair ld = new Editor.LocalizationDataPair();
                 ld.ID = (string)view.Rows[i].Cells[0].Value;
@@ -49,7 +51,9 @@ namespace LocalizationEditor
         {
             List<Editor.LocalizationDataPair> ldp = new List<Editor.LocalizationDataPair>();
 
-            for (int i = 0; i < view.RowCount - 1; i++)
+            int TotalRowCount = (view.AllowUserToAddRows) ? view.RowCount - 1 : view.RowCount;
+
+            for (int i = 0; i < TotalRowCount; i++)
             {
                 Editor.LocalizationDataPair ld = new Editor.LocalizationDataPair();
                 ld.ID = (string)view.Rows[i].Cells[0].Value;

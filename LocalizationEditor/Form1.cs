@@ -54,7 +54,7 @@ namespace LocalizationEditor
                 {
                     OriSet = Editor.LoadSetFromFile(openFileDialog.FileName);
                     CurrentOriPath = openFileDialog.FileName;
-                    Hint.Text = "原文已加载！";
+                    Hint.Text = "原文已加载！" + DateTime.Now;
 
                     FILE_ORI.Text = OriSet.FileName;
                     LANG_ORI.Text = OriSet.Language;
@@ -66,7 +66,7 @@ namespace LocalizationEditor
                 {
                     OriSet = new Localization.LanguageSet();
                     CurrentOriPath = string.Empty;
-                    Hint.Text = "原文加载失败！";
+                    Hint.Text = "原文加载失败！" + DateTime.Now;
 
                     FILE_ORI.Text = "未加载";
                     LANG_ORI.Text = "未加载";
@@ -85,7 +85,7 @@ namespace LocalizationEditor
         {
             if (CurrentOriPath == string.Empty)
             {
-                Hint.Text = "未加载原文!";
+                Hint.Text = "未加载原文!" + DateTime.Now;
             }
             else
             {
@@ -100,7 +100,7 @@ namespace LocalizationEditor
                     {
                         TraSet = Editor.LoadSetFromFile(openFileDialog.FileName);
                         CurrentTraPath = openFileDialog.FileName;
-                        Hint.Text = "译文已加载！";
+                        Hint.Text = "译文已加载！" + DateTime.Now;
 
                         FILE_TRA.Text = TraSet.FileName;
                         LANG_TRA.Text = TraSet.Language;
@@ -113,7 +113,7 @@ namespace LocalizationEditor
                     {
                         TraSet = new Localization.LanguageSet();
                         CurrentTraPath = string.Empty;
-                        Hint.Text = "译文加载失败！";
+                        Hint.Text = "译文加载失败！" + DateTime.Now;
 
                         FILE_TRA.Text = "未加载";
                         LANG_TRA.Text = "未加载";
@@ -135,7 +135,7 @@ namespace LocalizationEditor
         {
             if (CurrentOriPath == string.Empty && CurrentTraPath == string.Empty)
             {
-                Hint.Text = "请先加载原文！";
+                Hint.Text = "请先加载原文！" + DateTime.Now;
                 return;
             }
             string HintText = "已保存";
@@ -150,13 +150,13 @@ namespace LocalizationEditor
                 if (CurrentTraPath != string.Empty)
                 {
                     Editor.SaveSetToFile(DataViewTool.GetTraData(DataView), TraSet.Language, CurrentTraPath);
-                    HintText += " 和译文 ";
+                    HintText += " 和译文 " + DateTime.Now;
                 }
                 Hint.Text = HintText;
             }
             catch
             {
-                Hint.Text = "保存失败!";
+                Hint.Text = "保存失败!" + DateTime.Now;
             }
         }
 
@@ -165,7 +165,7 @@ namespace LocalizationEditor
 
             if (CurrentTraPath == string.Empty)
             {
-                Hint.Text = "未加载译文!";
+                Hint.Text = "未加载译文!" + DateTime.Now;
             }
             else
             {
@@ -176,12 +176,44 @@ namespace LocalizationEditor
                 }
                 catch
                 {
-                    Hint.Text = "保存失败!";
+                    Hint.Text = "保存失败!" + DateTime.Now;
                 }
 
 
 
             }
+        }
+
+        private void IsOriEditable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IsOriEditable.Checked)
+            {
+                for (int i = 0; i < DataView.RowCount; i++)
+                {
+                    DataView.Rows[i].Cells[0].ReadOnly = false;
+                    DataView.Rows[i].Cells[1].ReadOnly = false;
+                }
+                DataView.AllowUserToAddRows = true;
+            }
+            else
+            {
+                for (int i = 0; i < DataView.RowCount; i++)
+                {
+                    DataView.Rows[i].Cells[0].ReadOnly = true;
+                    DataView.Rows[i].Cells[1].ReadOnly = true;
+                }
+                DataView.AllowUserToAddRows = false;
+            }
+        }
+
+        private void Hint_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://ryubai.github.io/UnityStandardUtils/");
         }
     }
 }

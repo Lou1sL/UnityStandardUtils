@@ -5,13 +5,29 @@ namespace UnityStandardUtils
 {
     public class InputController
     {
-        public class InputSetting
+        public enum KeyCodeMap
         {
-            public Dictionary<KeyCodeMap, KeyCode> KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
+            Pause,
+            SwitchCharactor,
+            Left,
+            Right,
+            Run,
+            Interact,
+            Invent,
+            Torch,
+            HIH,
+            //Xiaoai
+            Crouch,
+            //Xiaofan
+            ClimbUp,
+            ClimbDown,
+            Jump,
+            GunMode,
+            Shoot,
+            Reload,
         }
-        
+
         //键盘修改键位设置
-        //该死的手柄(问题太多),加不加入支持将来再说
         private static Dictionary<KeyCodeMap, KeyCode> KeyCodeMapDefault = new Dictionary<KeyCodeMap, KeyCode>()
         {
             { KeyCodeMap.Pause          , KeyCode.Escape    },
@@ -42,28 +58,7 @@ namespace UnityStandardUtils
 
         private static Dictionary<KeyCodeMap, KeyCode> KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
 
-        public enum KeyCodeMap
-        {
-            Pause,
-            SwitchCharactor,
-            Left,
-            Right,
-            Run,
-            Interact,
-            Invent,
-            Torch,
-            HIH,
-            //Xiaoai
-            Crouch,
-            //Xiaofan
-            ClimbUp,
-            ClimbDown,
-            Jump,
-            GunMode,
-            Shoot,
-            Reload,
-
-        }
+        
 
         public enum KeyStatus
         {
@@ -138,6 +133,14 @@ namespace UnityStandardUtils
         {
             KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
         }
+
+
+
+        public class InputSetting
+        {
+            public Dictionary<KeyCodeMap, KeyCode> KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
+        }
+
         /// <summary>
         /// 储存当前配置到存档文件
         /// </summary>

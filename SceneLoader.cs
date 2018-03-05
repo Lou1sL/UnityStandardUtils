@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace UnityStandardUtils
 {
-    class SceneLoader
+    public static class SceneLoader
     {
         private static Dictionary<string, object> DataHolder = new Dictionary<string, object>();
         

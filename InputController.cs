@@ -5,60 +5,23 @@ namespace UnityStandardUtils
 {
     public class InputController
     {
-        public enum KeyCodeMap
+        //功能键
+        public enum Func
         {
-            Pause,
-            SwitchCharactor,
             Left,
             Right,
-            Run,
-            Interact,
-            Invent,
-            Torch,
-            HIH,
-            //Xiaoai
-            Crouch,
-            //Xiaofan
-            ClimbUp,
-            ClimbDown,
-            Jump,
-            GunMode,
-            Shoot,
-            Reload,
         }
 
-        //键盘修改键位设置
-        private static Dictionary<KeyCodeMap, KeyCode> KeyCodeMapDefault = new Dictionary<KeyCodeMap, KeyCode>()
+        //默认键位设置
+        private static Dictionary<Func, KeyCode> KeyCodeMapDefault = new Dictionary<Func, KeyCode>()
         {
-            { KeyCodeMap.Pause          , KeyCode.Escape    },
-
-            { KeyCodeMap.SwitchCharactor, KeyCode.Q         },
-
-            { KeyCodeMap.Left           , KeyCode.A         },
-            { KeyCodeMap.Right          , KeyCode.D         },
-            { KeyCodeMap.Run            , KeyCode.LeftShift },
-
-            { KeyCodeMap.Interact       , KeyCode.E         },
-            { KeyCodeMap.Invent         , KeyCode.Tab       },
-
-            { KeyCodeMap.Torch          , KeyCode.LeftAlt   },
-            { KeyCodeMap.HIH            , KeyCode.F         },
-            //Xiaoai
-            { KeyCodeMap.Crouch         , KeyCode.C         },
-            //Xiaofan
-            { KeyCodeMap.ClimbUp        , KeyCode.W         },
-            { KeyCodeMap.ClimbDown      , KeyCode.S         },
-            { KeyCodeMap.Jump           , KeyCode.Space     },
-
-            { KeyCodeMap.GunMode        , KeyCode.Mouse1    },
-            { KeyCodeMap.Shoot          , KeyCode.Mouse0    },
-            { KeyCodeMap.Reload         , KeyCode.R         },
-
+            { Func.Left           , KeyCode.A         },
+            { Func.Right          , KeyCode.D         },
         };
 
-        private static Dictionary<KeyCodeMap, KeyCode> KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
 
-        
+        //当前配置
+        private static Dictionary<Func, KeyCode> KeyCodeSetMap = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
 
         public enum KeyStatus
         {
@@ -82,7 +45,7 @@ namespace UnityStandardUtils
         /// <param name="ks">状态</param>
         /// <param name="kc">功能</param>
         /// <returns></returns>
-        public static bool GetKey(KeyStatus ks, KeyCodeMap kc)
+        public static bool GetKey(KeyStatus ks, Func kc)
         {
             KeyCode inputKey;
             bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
@@ -105,7 +68,7 @@ namespace UnityStandardUtils
         /// </summary>
         /// <param name="kc"></param>
         /// <returns></returns>
-        public static KeyCode GetKeyCodeByMap(KeyCodeMap kc)
+        public static KeyCode GetKeyCodeByFunc(Func kc)
         {
             KeyCode inputKey;
             bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
@@ -117,7 +80,7 @@ namespace UnityStandardUtils
         /// <param name="k">按键</param>
         /// <param name="kc">功能</param>
         /// <returns>是否成功（如果该键已被使用则返回false）</returns>
-        public static bool SetKeyCodeByMap(KeyCode k, KeyCodeMap kc)
+        public static bool SetKeyCodeByFunc(KeyCode k, Func kc)
         {
 
             bool isContainThisValue = KeyCodeSetMap.ContainsValue(k);
@@ -131,14 +94,14 @@ namespace UnityStandardUtils
         /// </summary>
         public static void SetToDefault()
         {
-            KeyCodeSetMap = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
+            KeyCodeSetMap = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
         }
 
 
 
         public class InputSetting
         {
-            public Dictionary<KeyCodeMap, KeyCode> KeyCodeSet = new Dictionary<KeyCodeMap, KeyCode>(KeyCodeMapDefault);
+            public Dictionary<Func, KeyCode> KeyCodeSet = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
         }
 
         /// <summary>

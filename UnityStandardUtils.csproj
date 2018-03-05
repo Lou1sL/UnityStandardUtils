@@ -49,6 +49,7 @@
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="SaveManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneLoader.cs" />
     <Compile Include="Web.cs" />
   </ItemGroup>
   <ItemGroup>

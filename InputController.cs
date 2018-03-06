@@ -5,23 +5,32 @@ namespace UnityStandardUtils
 {
     public class InputController
     {
-        //功能键
-        public enum Func
+
+        private static Dictionary<int, KeyCode> DefaultKeymap = new Dictionary<int, KeyCode>();
+        private static Dictionary<int, KeyCode> CurrrentKeymap = new Dictionary<int, KeyCode>(DefaultKeymap);
+
+
+
+        public static void InitInputController<T>(Dictionary<T, KeyCode> defaultMap)
         {
-            Left,
-            Right,
+            DefaultKeymap.Clear();
+            CurrrentKeymap.Clear();
+
+            foreach (KeyValuePair<T, KeyCode> kvp in defaultMap)
+            {
+                if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for Key!");
+
+
+                int Func = (int)(object)kvp.Key;
+                KeyCode KC = kvp.Value;
+
+                DefaultKeymap.Add(Func, KC);
+            }
+
+            CurrrentKeymap = new Dictionary<int, KeyCode>(DefaultKeymap);
         }
 
-        //默认键位设置
-        private static Dictionary<Func, KeyCode> KeyCodeMapDefault = new Dictionary<Func, KeyCode>()
-        {
-            { Func.Left           , KeyCode.A         },
-            { Func.Right          , KeyCode.D         },
-        };
 
-
-        //当前配置
-        private static Dictionary<Func, KeyCode> KeyCodeSetMap = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
 
         public enum KeyStatus
         {
@@ -45,10 +54,12 @@ namespace UnityStandardUtils
         /// <param name="ks">状态</param>
         /// <param name="kc">功能</param>
         /// <returns></returns>
-        public static bool GetKey(KeyStatus ks, Func kc)
+        public static bool GetKey<T>(KeyStatus ks, T kc)
         {
+            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for Key!");
+
             KeyCode inputKey;
-            bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
+            bool isContainThisKey = CurrrentKeymap.TryGetValue((int)(object)kc, out inputKey);
             bool result = false;
 
             if (isContainThisKey)
@@ -68,10 +79,12 @@ namespace UnityStandardUtils
         /// </summary>
         /// <param name="kc"></param>
         /// <returns></returns>
-        public static KeyCode GetKeyCodeByFunc(Func kc)
+        public static KeyCode GetKeyCodeByFunc<T>(T kc)
         {
+            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for Key!");
+
             KeyCode inputKey;
-            bool isContainThisKey = KeyCodeSetMap.TryGetValue(kc, out inputKey);
+            CurrrentKeymap.TryGetValue((int)(object)kc, out inputKey);
             return inputKey;
         }
         /// <summary>
@@ -80,13 +93,14 @@ namespace UnityStandardUtils
         /// <param name="k">按键</param>
         /// <param name="kc">功能</param>
         /// <returns>是否成功（如果该键已被使用则返回false）</returns>
-        public static bool SetKeyCodeByFunc(KeyCode k, Func kc)
+        public static bool SetKeyCodeByFunc<T>(KeyCode k, T kc)
         {
+            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for Key!");
 
-            bool isContainThisValue = KeyCodeSetMap.ContainsValue(k);
+            bool isContainThisValue = CurrrentKeymap.ContainsValue(k);
             if (isContainThisValue) return false;
 
-            KeyCodeSetMap[kc] = k;
+            CurrrentKeymap[(int)(object)kc] = k;
             return true;
         }
         /// <summary>
@@ -94,14 +108,16 @@ namespace UnityStandardUtils
         /// </summary>
         public static void SetToDefault()
         {
-            KeyCodeSetMap = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
+            CurrrentKeymap = new Dictionary<int, KeyCode>(DefaultKeymap);
         }
 
 
-
-        public class InputSetting
+        /// <summary>
+        /// 配置文件格式
+        /// </summary>
+        private class InputSetting
         {
-            public Dictionary<Func, KeyCode> KeyCodeSet = new Dictionary<Func, KeyCode>(KeyCodeMapDefault);
+            public Dictionary<int, KeyCode> SaveKeymap = new Dictionary<int, KeyCode>(DefaultKeymap);
         }
 
         /// <summary>
@@ -110,9 +126,9 @@ namespace UnityStandardUtils
         public static void SaveSettings()
         {
             InputSetting setting = new InputSetting();
-            setting.KeyCodeSet = KeyCodeSetMap;
+            setting.SaveKeymap = CurrrentKeymap;
 
-            SaveManager settingSaved = new SaveManager(Application.persistentDataPath,"InputSetting.save");
+            SaveManager settingSaved = new SaveManager(Application.persistentDataPath, "InputSetting.save");
             settingSaved.SetData(setting);
         }
         /// <summary>
@@ -125,8 +141,12 @@ namespace UnityStandardUtils
             SaveManager settingSaved = new SaveManager(Application.persistentDataPath, "InputSetting.save");
             settingSaved.GetData(ref setting);
 
-            KeyCodeSetMap = setting.KeyCodeSet;
-        }
 
+            if (setting.SaveKeymap.Keys.Count == DefaultKeymap.Keys.Count) CurrrentKeymap = setting.SaveKeymap;
+            else
+            {
+                throw new System.ArrayTypeMismatchException("The saved key functions mismatch current key functions");
+            }
+        }
     }
 }

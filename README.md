@@ -186,21 +186,58 @@ Console.WriteLine(playerBag.ToString());
 
 ### InputController.cs
 键位管理器
-#### !!! 请先修改KeyCodeMap(功能键)和KeyCodeMapDefault(功能键对应的默认键设置)再打包dll !!!
 
 ```CSharp
+
+//功能键
+public enum Func
+{
+    Pause,
+    Left,
+    Right,
+    Up,
+    Down,
+    Sprint,
+    Fire,
+    Reload,
+}
+
+//默认键位设置
+private static Dictionary<Func, KeyCode> KeyCodeMapDefault = new Dictionary<Func, KeyCode>()
+{
+        { Func.Left           , KeyCode.A         },
+        { Func.Right          , KeyCode.D         },
+        { Func.Up             , KeyCode.W         },
+        { Func.Down           , KeyCode.S         },
+        { Func.Sprint         , KeyCode.LeftShift },
+        { Func.Fire           , KeyCode.Mouse0    },
+        { Func.Reload         , KeyCode.R         },
+        { Func.Pause          , KeyCode.Escape    },
+};
+
+//初始化
+InputController.InitInputController(KeyCodeMapDefault);
 //读取设置文件到当前配置
 InputController.LoadSettings();
 //设定Pause功能为P键
-InputController.SetKeyCodeByMap(KeyCode.P, InputController.KeyCodeMap.Pause);
+InputController.SetKeyCodeByFunc(KeyCode.P, Func.Pause);
 //设定当前全部功能回到默认配置
 InputController.SetToDefault();
 //保存当前配置到配置文件
 InputController.SaveSettings();
 //获得Pause功能对应的按键
-KeyCode pauseCode = InputController.GetKeyCodeByMap(InputController.KeyCodeMap.Pause);
+KeyCode pauseCode = InputController.GetKeyCodeByFunc(Func.Pause);
 //判断Pause功能对应按键是否刚刚按下
-bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, InputController.KeyCodeMap.Pause);
+bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, Func.Pause);
 
+
+```
+
+### SceneLoader.cs
+可以传参数的SceneManager
+
+```CSharp
+
+//太简单了，看源码吧，就30行，2333
 
 ```

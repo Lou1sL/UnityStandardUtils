@@ -37,9 +37,53 @@ namespace UnityStandardUtils
             /// 添加一个键值对，如果是空的就没必要添加了
             /// </summary>
             /// <param name="p"></param>
-            public void AddParam(ParamPair p)
+            /// <returns></returns>
+            public bool AddParam(ParamPair p)
             {
-                if(!p.IsEmpty())paramPairs.Add(p);
+                if (p.IsEmpty()) return false;
+
+                paramPairs.Add(p);
+                return true;
+            }
+
+            /// <summary>
+            /// 添加一群键值对
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <typeparam name="N"></typeparam>
+            /// <param name="pairs"></param>
+            public void AddParamPairs<T, N>(Dictionary<T,N> pairs)
+            {
+                foreach(KeyValuePair<T,N> kvp in pairs)
+                {
+                    ParamPair p = new ParamPair(Convert.ToString(kvp.Key), Convert.ToString(kvp.Value));
+                    if (!p.IsEmpty())paramPairs.Add(p);
+                }
+            }
+            
+            /// <summary>
+            /// 添加一个键值对，如果是空的就没必要添加了
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <typeparam name="N"></typeparam>
+            /// <param name="LVal"></param>
+            /// <param name="RVal"></param>
+            /// <returns></returns>
+            public bool AddParam<T,N>(T LVal,N RVal)
+            {
+                ParamPair p = new ParamPair(Convert.ToString(LVal), Convert.ToString(RVal));
+                if (p.IsEmpty()) return false;
+
+                paramPairs.Add(p);
+                return true;
+            }
+
+            /// <summary>
+            /// 清除全部键值对
+            /// </summary>
+            public void ClearParam()
+            {
+                paramPairs.Clear();
             }
 
 
@@ -71,7 +115,7 @@ namespace UnityStandardUtils
                 fs.Close();
                 fs.Dispose();
 
-                try { File.Delete(SwapFileLocation); } catch (Exception e) { }
+                try { File.Delete(SwapFileLocation); } catch{ }
 
 
                 return status;
@@ -106,7 +150,7 @@ namespace UnityStandardUtils
                 fs.Close();
                 fs.Dispose();
 
-                if (!status.IsSuccess()) try { File.Delete(path); }catch(Exception e) { }
+                if (!status.IsSuccess()) try { File.Delete(path); }catch{ }
 
                 return status;
             }

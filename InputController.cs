@@ -19,14 +19,12 @@ namespace UnityStandardUtils
             foreach (KeyValuePair<T, KeyCode> kvp in defaultMap)
             {
                 if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for Key!");
-
-
+                
                 int Func = (int)(object)kvp.Key;
                 KeyCode KC = kvp.Value;
 
                 DefaultKeymap.Add(Func, KC);
             }
-
             CurrrentKeymap = new Dictionary<int, KeyCode>(DefaultKeymap);
         }
 

@@ -2,7 +2,11 @@
 
 Unity基础工具库
 
-该dll实现了一些Unity开发一般会用到的功能
+提供了Unity开发的一些常用功能：
+
+加密编解码，存取档，语言本地化及对应的可视化编辑器，单例MonoBehavior的实现，可以传参的SceneLoader，web请求，键位管理器，玩家背包模拟
+
+使用请打包dll，并和Newtonsoft.Json放在项目Asset目录下
 
 欢迎fork
 
@@ -59,6 +63,7 @@ SaveManager.GetDataReturnCode res = new SaveManager("SavePath", "FileName").GetD
 
 ### Localization.cs
 语言本地化，基于XML的多国语言支持
+解决方案内的LocalizationEditor编译后可以可视化的编辑本地化文档，更加方便
 
 ```CSharp
 Localization.Init(Environment.CurrentDirectory + "/Localization/", "en-US");
@@ -111,8 +116,11 @@ httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
 //httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
 
 //参数添加
-httpRequest.AddParam(new Web.HttpRequest.ParamPair("name","ryubai"));
-httpRequest.AddParam(new Web.HttpRequest.ParamPair("age", "ihavenoidea"));
+httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
+httpRequest.AddParam("name", "ryubai");
+httpRequest.AddParamPairs(new Dictionary<string, string> { {"name","ryubai" },{"age","secret"}});
+//清除参数
+httpRequest.ClearParams();
 
 //获取返回的内容到string str
 httpRequest.SendRequest(ref str);
@@ -239,5 +247,15 @@ bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, Func.Pau
 ```CSharp
 
 //太简单了，看源码吧，就30行，2333
+
+```
+
+### Singleton.cs
+单例和单例MonoBehavior的实现，再也不需要Ctrl+C，Ctrl+V了
+
+```CSharp
+
+//脚本继承SingletonMonoBehaviour就行了吧。。。调用Instance使用即可
+//凡是继承了的脚本，运行时只要instance被调用就会立马产生一个以该脚本命名的包含本脚本的GameObject
 
 ```

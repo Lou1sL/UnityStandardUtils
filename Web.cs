@@ -60,7 +60,7 @@ namespace UnityStandardUtils
                     if (!p.IsEmpty())paramPairs.Add(p);
                 }
             }
-            
+
             /// <summary>
             /// 添加一个键值对，如果是空的就没必要添加了
             /// </summary>
@@ -81,7 +81,7 @@ namespace UnityStandardUtils
             /// <summary>
             /// 清除全部键值对
             /// </summary>
-            public void ClearParam()
+            public void ClearParams()
             {
                 paramPairs.Clear();
             }

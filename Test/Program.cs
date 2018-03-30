@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityStandardUtils;
+using UnityStandardUtils.Web;
 
 namespace Test
 {
@@ -10,15 +10,15 @@ namespace Test
 
         static void Main(string[] args)
         {
-            Web.HttpRequest httpRequest = new Web.HttpRequest();
+            HttpRequest httpRequest = new HttpRequest();
             httpRequest.SetUrl("www.revokedstudio.com");
 
             //GET和POST方法
-            httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
+            httpRequest.SetRequestType(HttpRequest.RequestType.GET);
             //httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
 
             //参数添加
-            httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
+            httpRequest.AddParam(new HttpRequest.ParamPair("name", "ryubai"));
             httpRequest.AddParam("name", "ryubai");
             httpRequest.AddParamPairs(new Dictionary<string, string> { {"name","ryubai" },{"age","secret"}});
             //清除参数

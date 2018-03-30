@@ -4,7 +4,12 @@ Unity基础工具库
 
 提供了Unity开发的一些常用功能：
 
-加密编解码，存取档，语言本地化及对应的可视化编辑器，单例MonoBehavior的实现，可以传参的SceneLoader，web请求，键位管理器，玩家背包模拟
+加密编解码，存取档，语言本地化及对应的可视化编辑器，单例MonoBehavior的实现，可以传参的SceneLoader，键位管理器，玩家背包模拟
+
+此外还有方便网游开发的UnityStandardUtils.Web，包含有：
+
+POST，GET请求
+资磁protobuf的高易用Socket客户/服务器端（服务器端可独立运行/包含在游戏内）
 
 使用请打包dll，并和Newtonsoft.Json放在项目Asset目录下
 
@@ -63,6 +68,7 @@ SaveManager.GetDataReturnCode res = new SaveManager("SavePath", "FileName").GetD
 
 ### Localization.cs
 语言本地化，基于XML的多国语言支持
+
 解决方案内的LocalizationEditor编译后可以可视化的编辑本地化文档，更加方便
 
 ```CSharp
@@ -103,20 +109,21 @@ en-US.xml
 ```
 
 
-### Web.cs
+### HttpRequest.cs
 网络相关
 
 http请求(GET/POST)：
 ```CSharp
-Web.HttpRequest httpRequest = new Web.HttpRequest();
+using UnityStandardUtils.Web;
+HttpRequest httpRequest = new HttpRequest();
 httpRequest.SetUrl("www.revokedstudio.com");
 
 //GET和POST方法
-httpRequest.SetRequestType(Web.HttpRequest.RequestType.GET);
-//httpRequest.SetRequestType(Web.HttpRequest.RequestType.POST);
+httpRequest.SetRequestType(HttpRequest.RequestType.GET);
+//httpRequest.SetRequestType(HttpRequest.RequestType.POST);
 
 //参数添加
-httpRequest.AddParam(new Web.HttpRequest.ParamPair("name", "ryubai"));
+httpRequest.AddParam(new HttpRequest.ParamPair("name", "ryubai"));
 httpRequest.AddParam("name", "ryubai");
 httpRequest.AddParamPairs(new Dictionary<string, string> { {"name","ryubai" },{"age","secret"}});
 //清除参数
@@ -150,8 +157,8 @@ ushort[,] combines = new ushort[COMBINATION_AMOUNT,3]
 {
 	//1与2合成产出0
 	{ 1,2,0 },
-    //2与0合成产出1
-    { 2,0,1 },
+	//2与0合成产出1
+	{ 2,0,1 },
 };
             
 //建立物品管理器对象并绑定物品及合成表
@@ -255,7 +262,7 @@ bool isPressed = InputController.GetKey(InputController.KeyStatus.Push, Func.Pau
 
 ```CSharp
 
-//脚本继承SingletonMonoBehaviour就行了吧。。。调用Instance使用即可
-//凡是继承了的脚本，运行时只要instance被调用就会立马产生一个以该脚本命名的包含本脚本的GameObject
+//脚本继承SingletonMonoBehaviour类就行了吧。。。调用Instance使用即可
+//凡是继承了的脚本，运行时只要Instance被调用就会立马产生一个以该脚本命名的包含本脚本的GameObject
 
 ```

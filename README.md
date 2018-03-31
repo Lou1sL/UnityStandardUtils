@@ -37,7 +37,7 @@ SocketStuff引擎:资磁protobuf的高易用Socket客户/服务器端（服务�
 ---
 
 
-使用请打包dll，并和Newtonsoft.Json放在项目Asset目录下
+使用请打包dll，并和Newtonsoft.Json.dll,protobuf-net.dll放在项目Asset目录下
 
 如果要使用独立的SocketStuff引擎，项目里添加对本dll的引用即可
 

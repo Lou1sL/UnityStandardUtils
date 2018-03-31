@@ -16,6 +16,15 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         public Server(string IP, int Port, MessageHandler messageHandler)
         {
+
+
+            Console.WriteLine("-----------------------------------------------------------------------------------");
+            Console.WriteLine("-----------------------------SocketStuff Server Engine-----------------------------");
+            Console.WriteLine("-----------------------------               By RyuBAI -----------------------------");
+            Console.WriteLine("-----------------------------------------------------------------------------------");
+            Console.WriteLine();
+
+
             messageHandle = messageHandler;
             //服务器IP地址  
             IPAddress ip = IPAddress.Parse(IP);
@@ -25,6 +34,8 @@ namespace UnityStandardUtils.Web.SocketStuff
                                         //通过Clientsoket发送数据
             myThread = new Thread(ListenClientConnect);
             myThread.Start();
+            
+            Console.WriteLine(">Srv Start");
             Console.ReadLine();
         }
 
@@ -38,7 +49,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                 Socket clientSocket = serverSocket.Accept();
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
-                Console.WriteLine(clientSocket.RemoteEndPoint.ToString());
+                Console.WriteLine(">Client Connected From("+clientSocket.RemoteEndPoint.ToString()+")");
             }
         }
 
@@ -51,6 +62,7 @@ namespace UnityStandardUtils.Web.SocketStuff
         private static void ReceiveMessage(object clientSocket)
         {
             Socket myClientSocket = (Socket)clientSocket;
+            string ClientDetail = myClientSocket.RemoteEndPoint.ToString();
 
             while (true)
             {
@@ -59,13 +71,15 @@ namespace UnityStandardUtils.Web.SocketStuff
                     int receiveNumber = myClientSocket.Receive(resultBuffer);
                     if (receiveNumber > 0)
                     {
+                        Console.WriteLine(">RcvMsg From(" + ClientDetail + ") & Len =(" + receiveNumber + ")");
+                        Console.WriteLine(">Calling Handler");
                         messageHandle?.Invoke(myClientSocket, receiveNumber, resultBuffer);
                     }
 
                 }
                 catch (System.Exception ex)
                 {
-                    System.Console.WriteLine(ex.Message);
+                    Console.WriteLine(">Client Droped From(" + ClientDetail + ")" + " With Reason (" + ex.Message + ")");
                     myClientSocket.Shutdown(SocketShutdown.Both);
                     myClientSocket.Close();
                     break;
@@ -81,6 +95,7 @@ namespace UnityStandardUtils.Web.SocketStuff
             if (myThread != null)
             {
                 myThread.Abort();
+                Console.WriteLine(">Srv Stop");
                 myThread = null;
             }
         }

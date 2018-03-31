@@ -10,14 +10,20 @@ Unity基础工具库
 
 此外还有方便网游开发的UnityStandardUtils.Web，包含有：
 
-POST，GET请求
+HttpRequest:POST，GET请求
 
-资磁protobuf的高易用Socket客户/服务器端（服务器端可独立运行或包含在游戏内）
+SocketStuff引擎:资磁protobuf的高易用Socket客户/服务器端（服务器端可独立运行或包含在游戏内）
 
 
 使用请打包dll，并和Newtonsoft.Json放在项目Asset目录下
 
 欢迎fork
+
+## UnityStandardUtils.Web.SocketStuff
+一个Socket引擎
+使用方法请查看解决方案内的SocketStuffExample示例程序
+非常简单
+
 
 ## 引擎无关功能：（高复用，无关UnityEngine.dll）
 

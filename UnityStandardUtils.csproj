@@ -52,6 +52,7 @@
     <Compile Include="SceneLoader.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Web\HttpRequest.cs" />
+    <Compile Include="Web\Socket\Client.cs" />
     <Compile Include="Web\Socket\Server.cs" />
     <Compile Include="Web\Socket\Socket\ByteStreamBuff.cs" />
     <Compile Include="Web\Socket\Socket\DataBuff.cs" />

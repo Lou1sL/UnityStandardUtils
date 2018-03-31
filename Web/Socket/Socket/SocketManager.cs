@@ -264,7 +264,7 @@ namespace UnityStandardUtils.Web.SocketStuff
         /// </summary>
         /// <param name="_currIP"></param>
         /// <param name="_currPort"></param>
-        public void Connect(string _currIP, int _currPort)
+        internal void Connect(string _currIP, int _currPort)
         {
             if (!IsConnceted)
             {
@@ -296,11 +296,8 @@ namespace UnityStandardUtils.Web.SocketStuff
         /// </summary>
         /// <param name="_protocalType"></param>
         /// <param name="_byteStreamBuff"></param>
-        public void SendMsg<T>(T protocalType, ByteStreamBuff _byteStreamBuff)
+        internal void SendMsg(int _protocalType, ByteStreamBuff _byteStreamBuff)
         {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for protocalType!");
-            int _protocalType = (int)(object)protocalType;
-
             SendMsgBase(_protocalType, _byteStreamBuff.ToArray());
         }
 
@@ -309,15 +306,12 @@ namespace UnityStandardUtils.Web.SocketStuff
         /// </summary>
         /// <param name="_protocalType"></param>
         /// <param name="data"></param>
-        public void SendMsg<T>(T protocalType, ProtoBuf.IExtensible data)
+        internal void SendMsg(int _protocalType, ProtoBuf.IExtensible data)
         {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for protocalType!");
-            int _protocalType = (int)(object)protocalType;
-
             SendMsgBase(_protocalType, ProtoBuf_Serializer(data));
         }
 
-        public void Close()
+        internal void Close()
         {
             _close();
         }

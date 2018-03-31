@@ -28,101 +28,34 @@ namespace UnityStandardUtils.Web.SocketStuff
     {
         private Dictionary<int, Callback_NetMessage_Handle> _netMessage_EventList = new Dictionary<int, Callback_NetMessage_Handle>();
         public Queue<sEvent_NetMessageData> _netMessageDataQueue = new Queue<sEvent_NetMessageData>();
-
-        private Dictionary<int, Callback_GameLogic_Handle> _gameLogic_EventList = new Dictionary<int, Callback_GameLogic_Handle>();
-        public Queue<sEvent_GameLogicData> _gameLogicDataQueue = new Queue<sEvent_GameLogicData>();
-
+        
         //添加网络事件观察者
-        public void addObsever<T>(T protocalType, Callback_NetMessage_Handle callback)
+        public void addObserver(int protocalType, Callback_NetMessage_Handle callback)
         {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for protocalType!");
-            int _protocalType = (int)(object)protocalType;
-
-
-            if (_netMessage_EventList.ContainsKey(_protocalType))
+            if (_netMessage_EventList.ContainsKey(protocalType))
             {
-                _netMessage_EventList[_protocalType] += callback;
+                _netMessage_EventList[protocalType] += callback;
             }
             else
             {
-                _netMessage_EventList.Add(_protocalType, callback);
+                _netMessage_EventList.Add(protocalType, callback);
             }
         }
         //删除网络事件观察者
-        public void removeObserver<T>(T protocalType, Callback_NetMessage_Handle callback)
+        public void removeObserver(int protocalType, Callback_NetMessage_Handle callback)
         {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for protocalType!");
-            int _protocalType = (int)(object)protocalType;
-
-
-            if (_netMessage_EventList.ContainsKey(_protocalType))
+            if (_netMessage_EventList.ContainsKey(protocalType))
             {
-                _netMessage_EventList[_protocalType] -= callback;
-                if (_netMessage_EventList[_protocalType] == null)
+                _netMessage_EventList[protocalType] -= callback;
+                if (_netMessage_EventList[protocalType] == null)
                 {
-                    _netMessage_EventList.Remove(_protocalType);
+                    _netMessage_EventList.Remove(protocalType);
                 }
             }
         }
-
-
-        //添加普通事件观察者
-        public void AddEventListener<T>(T eventType, Callback_GameLogic_Handle callback)
-        {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for eventType!");
-            int _eventType = (int)(object)eventType;
-
-            if (_gameLogic_EventList.ContainsKey(_eventType))
-            {
-                _gameLogic_EventList[_eventType] += callback;
-            }
-            else
-            {
-                _gameLogic_EventList.Add(_eventType, callback);
-            }
-        }
-        //删除普通事件观察者
-        public void RemoveEventListener<T>(T eventType, Callback_GameLogic_Handle callback)
-        {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for eventType!");
-            int _eventType = (int)(object)eventType;
-
-
-            if (_gameLogic_EventList.ContainsKey(_eventType))
-            {
-                _gameLogic_EventList[_eventType] -= callback;
-                if (_gameLogic_EventList[_eventType] == null)
-                {
-                    _gameLogic_EventList.Remove(_eventType);
-                }
-            }
-        }
-        //推送消息
-        public void PostEvent<T>(T eventType, object data = null)
-        {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for eventType!");
-            int _eventType = (int)(object)eventType;
-
-
-            if (_gameLogic_EventList.ContainsKey(_eventType))
-            {
-                _gameLogic_EventList[_eventType](data);
-            }
-        }
-
-
 
         void Update()
         {
-            while (_gameLogicDataQueue.Count > 0)
-            {
-                sEvent_GameLogicData tmpGameLogicData = _gameLogicDataQueue.Dequeue();
-                if (_gameLogic_EventList.ContainsKey(tmpGameLogicData._eventType))
-                {
-                    _gameLogic_EventList[tmpGameLogicData._eventType](tmpGameLogicData._eventData);
-                }
-            }
-
             while (_netMessageDataQueue.Count > 0)
             {
                 lock (_netMessageDataQueue)

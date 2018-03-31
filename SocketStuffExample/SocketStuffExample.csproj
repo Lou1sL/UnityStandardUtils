@@ -34,6 +34,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Reference\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\bin\Release\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

@@ -34,6 +34,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -54,94 +58,8 @@
     <Compile Include="Web\HttpRequest.cs" />
     <Compile Include="Web\SocketStuff\Client.cs" />
     <Compile Include="Web\SocketStuff\Server.cs" />
-    <Compile Include="Web\SocketStuff\Socket\ByteStreamBuff.cs" />
-    <Compile Include="Web\SocketStuff\Socket\DataBuff.cs" />
     <Compile Include="Web\SocketStuff\Socket\MessageCenter.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\BclHelpers.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\BufferExtension.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\BufferPool.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\CallbackAttributes.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Compiler\CompilerContext.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Compiler\CompilerDelegates.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Compiler\Local.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\DataFormat.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Extensible.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ExtensibleUtil.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\GlobalSuppressions.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Helpers.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\IExtensible.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\IExtension.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ImplicitFields.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\KeyValuePairProxy.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\AttributeMap.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\BasicList.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\CallbackSet.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\MetaType.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\RuntimeTypeModel.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\SubType.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\TypeFormatEventArgs.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\TypeModel.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Meta\ValueMember.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\NetObjectCache.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\PrefixStyle.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoContractAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoEnumAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoException.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoIgnoreAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoIncludeAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoMemberAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoReader.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ProtoWriter.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\SerializationContext.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ArrayDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\BlobSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\BooleanSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ByteSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\CharSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\CompiledSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\DateTimeSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\DecimalSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\DefaultValueDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\DoubleSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\EnumSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\FieldDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\GuidSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\Int16Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\Int32Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\Int64Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\IProtoSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\IProtoTypeSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ISerializerProxy.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\KeyValuePairDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ListDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\MemberSpecifiedDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\NetObjectSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\NullDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ParseableSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\PropertyDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\ProtoDecoratorBase.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\SByteSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\SingleSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\StringSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\SubItemSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\SurrogateSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\SystemTypeSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\TagDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\TimeSpanSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\TupleSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\TypeSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\UInt16Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\UInt32Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\UInt64Serializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\Serializers\UriDecorator.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ServiceModel\ProtoBehaviorAttribute.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ServiceModel\ProtoBehaviorExtensionElement.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ServiceModel\ProtoEndpointBehavior.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ServiceModel\ProtoOperationBehavior.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\ServiceModel\XmlProtoSerializer.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\SubItemToken.cs" />
-    <Compile Include="Web\SocketStuff\Socket\protobuf\WireType.cs" />
+    <Compile Include="Web\SocketStuff\Socket\PackageStructure.cs" />
     <Compile Include="Web\SocketStuff\Socket\SocketManager.cs" />
   </ItemGroup>
   <ItemGroup>

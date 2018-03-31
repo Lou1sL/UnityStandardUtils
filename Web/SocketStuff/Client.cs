@@ -14,28 +14,38 @@ namespace UnityStandardUtils.Web.SocketStuff
         }
 
 
-
+        /// <summary>
+        /// 以ProtoBuf方式发送
+        /// </summary>
+        /// <param name="_protocalType"></param>
+        /// <param name="data"></param>
         public static void SendMsg<T>(T cmd, ProtoBuf.IExtensible data)
         {
             if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for command Base!");
-            SocketManager.Instance.SendMsg((int)(object)cmd, data);
+            SocketManager.Instance.SendMsgBase((int)(object)cmd, PkgStruct.ProtoBuf_Serializer(data));
         }
-        public static void SendMsg<T>(T cmd, ByteStreamBuff data)
+
+        /// <summary>
+        /// 以二进制方式发送
+        /// </summary>
+        /// <param name="_protocalType"></param>
+        /// <param name="_byteStreamBuff"></param>
+        public static void SendMsg<T>(T cmd, PkgStruct.ByteStreamBuff data)
         {
             if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for command Base!");
-            SocketManager.Instance.SendMsg((int)(object)cmd, data);
+            SocketManager.Instance.SendMsgBase((int)(object)cmd, data.ToArray());
         }
 
 
         public static void AddCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
         {
             if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for command Base!");
-            MessageCenter.Instance.addObserver((int)(object)cmd, callBack);
+            if (MessageCenter.Instance) MessageCenter.Instance.addObserver((int)(object)cmd, callBack);
         }
         public static void RemoveCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
         {
             if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for command Base!");
-            MessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
+            if(MessageCenter.Instance) MessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
         }
     }
 }

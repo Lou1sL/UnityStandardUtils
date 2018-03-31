@@ -40,12 +40,18 @@ namespace UnityStandardUtils
     {
         protected static T sInstance = null;
         protected static bool IsCreate = false;
-        public static bool s_debugDestroy = false;
+        //这个NeedDestory是不是有点奇怪？
+        //是这样滴：在UnityEditor里停止游戏的时候，GameObject会以随机顺序Destory掉
+        //这样子，有可能导致使用该单例的脚本所挂载的GameObject已经被Destory掉了，但是调用Instance的另一个脚本还在执行
+        //结果就又产生出来了一个Instance
+        //从而在控制台产生"Some objects were not cleaned up when closing the scene"的报错
+        public static bool NeedDestroy = false;
         public static T Instance
         {
             get
             {
-                if (s_debugDestroy)
+                //
+                if (NeedDestroy)
                 {
                     return null;
                 }
@@ -65,21 +71,20 @@ namespace UnityStandardUtils
             }
         }
 
-        protected virtual void Init()
-        {
-
-        }
+        protected virtual void Init(){}
 
         protected virtual void OnDestroy()
         {
             sInstance = null;
             IsCreate = false;
+            NeedDestroy = true;
         }
 
         private void OnApplicationQuit()
         {
             sInstance = null;
             IsCreate = false;
+            NeedDestroy = true;
         }
 
         public static void CreateInstance()

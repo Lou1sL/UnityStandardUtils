@@ -5,7 +5,7 @@ using System;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
-    public delegate void MessageHandler(Socket clientSocket, int receiveNumber, byte[] resultBuffer);
+    public delegate void MessageHandler(Socket clientSocket, PkgStruct.SocketData socketData);
 
     public class Server
     {
@@ -55,6 +55,9 @@ namespace UnityStandardUtils.Web.SocketStuff
 
 
         private static byte[] resultBuffer = new byte[1024];
+        private static PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
+        private static PkgStruct.SocketData _socketData = new PkgStruct.SocketData();
+
         /// <summary>  
         /// 接收消息
         /// </summary>  
@@ -68,16 +71,24 @@ namespace UnityStandardUtils.Web.SocketStuff
             {
                 try
                 {
-                    int receiveNumber = myClientSocket.Receive(resultBuffer);
-                    if (receiveNumber > 0)
+                    int receiveLength = myClientSocket.Receive(resultBuffer);
+                    if (receiveLength > 0)
                     {
-                        Console.WriteLine(">RcvMsg From(" + ClientDetail + ") & Len =(" + receiveNumber + ")");
-                        Console.WriteLine(">Calling Handler");
-                        messageHandle?.Invoke(myClientSocket, receiveNumber, resultBuffer);
-                    }
+                        Console.WriteLine(">RcvMsg From(" + ClientDetail + ") & Len =(" + receiveLength + ")");
 
+
+                        //将收到的数据添加到缓存器中
+                        _databuffer.AddBuffer(resultBuffer, receiveLength);
+                        //取出一条完整数据
+                        while (_databuffer.GetData(out _socketData))
+                        {
+
+                            Console.WriteLine(">Calling Handler");
+                            messageHandle?.Invoke(myClientSocket, _socketData);
+                        }
+                    }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(">Client Droped From(" + ClientDetail + ")" + " With Reason (" + ex.Message + ")");
                     myClientSocket.Shutdown(SocketShutdown.Both);

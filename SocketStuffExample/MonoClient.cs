@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityStandardUtils.Web.SocketStuff;
 
-public class MonoClient : MonoBehaviour {
-    
+public class MonoClient : MonoBehaviour
+{
+
     void OnEnable()
     {
         //绑定数据包发送后的服务器回调处理函数
@@ -21,7 +22,7 @@ public class MonoClient : MonoBehaviour {
     {
         OnButton_DisConnect();
     }
-    
+
     /// <summary>
     /// 连接服务器
     /// </summary>
@@ -44,8 +45,8 @@ public class MonoClient : MonoBehaviour {
     public void OnButton_ProtoBuff_SendMsg()
     {
         gprotocol.CS_LOGINSERVER _cs_loginServer = new gprotocol.CS_LOGINSERVER();
-        _cs_loginServer.account = "ProtoBuf_LogicData";
-        _cs_loginServer.password = "ProtoBuf_123456";
+        _cs_loginServer.account = "留白";
+        _cs_loginServer.password = "真机智";
         Client.SendMsg(eProtocalCommand.sc_protobuf_login, _cs_loginServer);
     }
     /// <summary>
@@ -53,11 +54,11 @@ public class MonoClient : MonoBehaviour {
     /// </summary>
     public void OnButton_Binary_SendMsg()
     {
-        ByteStreamBuff _tmpbuff = new ByteStreamBuff();
-        _tmpbuff.Write_Int(1314);
-        _tmpbuff.Write_Float(99.99f);
-        _tmpbuff.Write_UniCodeString("Claine");
-        _tmpbuff.Write_UniCodeString("123456");
+        PkgStruct.ByteStreamBuff _tmpbuff = new PkgStruct.ByteStreamBuff();
+        _tmpbuff.Write_Int(1234);
+        _tmpbuff.Write_Float(56.78f);
+        _tmpbuff.Write_UniCodeString("留白");
+        _tmpbuff.Write_UniCodeString("真机智");
         Client.SendMsg(eProtocalCommand.sc_binary_login, _tmpbuff);
     }
 
@@ -68,7 +69,7 @@ public class MonoClient : MonoBehaviour {
     /// <param name="_msgData"></param>
     private void CallBack_ProtoBuff_LoginServer(byte[] _msgData)
     {
-        gprotocol.CS_LOGINSERVER _tmpLoginServer = SocketManager.ProtoBuf_Deserialize<gprotocol.CS_LOGINSERVER>(_msgData);
+        gprotocol.CS_LOGINSERVER _tmpLoginServer = PkgStruct.ProtoBuf_Deserialize<gprotocol.CS_LOGINSERVER>(_msgData);
         Debug.Log(_tmpLoginServer.account);
         Debug.Log(_tmpLoginServer.password);
     }
@@ -78,7 +79,7 @@ public class MonoClient : MonoBehaviour {
     /// <param name="_msgData"></param>
     private void CallBack_Binary_LoginServer(byte[] _msgData)
     {
-        ByteStreamBuff _tmpbuff = new ByteStreamBuff(_msgData);
+        PkgStruct.ByteStreamBuff _tmpbuff = new PkgStruct.ByteStreamBuff(_msgData);
         Debug.Log(_tmpbuff.Read_Int());
         Debug.Log(_tmpbuff.Read_Float());
         Debug.Log(_tmpbuff.Read_UniCodeString());

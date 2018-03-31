@@ -2,15 +2,13 @@
 using System.Threading;
 using System.Net;
 using System;
-using System.IO;
-using ProtoBuf;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
-    public class SocketManager
+    internal class SocketManager
     {
         private static SocketManager _instance;
-        public static SocketManager Instance
+        internal static SocketManager Instance
         {
             get
             {
@@ -25,42 +23,16 @@ namespace UnityStandardUtils.Web.SocketStuff
         private int _currPort;
 
         private bool _isConnected = false;
-        public bool IsConnceted { get { return _isConnected; } }
+        internal bool IsConnceted { get { return _isConnected; } }
         private Socket clientSocket = null;
         private Thread receiveThread = null;
 
-        private DataBuffer _databuffer = new DataBuffer();
+        private PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
 
         byte[] _tmpReceiveBuff = new byte[4096];
-        private sSocketData _socketData = new sSocketData();
+        private PkgStruct.SocketData _socketData = new PkgStruct.SocketData();
 
-        /// <summary>
-        /// 断开
-        /// </summary>
-        private void _close()
-        {
-            if (!_isConnected)
-                return;
-
-            _isConnected = false;
-
-            if (receiveThread != null)
-            {
-                receiveThread.Abort();
-                receiveThread = null;
-            }
-
-            if (clientSocket != null && clientSocket.Connected)
-            {
-                clientSocket.Close();
-                clientSocket = null;
-            }
-        }
-
-        private void _ReConnect()
-        {
-        }
-
+        
         /// <summary>
         /// 连接
         /// </summary>
@@ -105,12 +77,12 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         private void _onConnect_Outtime()
         {
-            _close();
+            Close();
         }
 
         private void _onConnect_Fail()
         {
-            _close();
+            Close();
         }
 
         /// <summary>
@@ -140,7 +112,6 @@ namespace UnityStandardUtils.Web.SocketStuff
                 if (!clientSocket.Connected)
                 {
                     _isConnected = false;
-                    _ReConnect();
                     break;
                 }
                 try
@@ -151,8 +122,8 @@ namespace UnityStandardUtils.Web.SocketStuff
                         _databuffer.AddBuffer(_tmpReceiveBuff, receiveLength);//将收到的数据添加到缓存器中
                         while (_databuffer.GetData(out _socketData))//取出一条完整数据
                         {
-                            sEvent_NetMessageData tmpNetMessageData = new sEvent_NetMessageData();
-                            tmpNetMessageData._eventType = _socketData._protocallType;
+                            Event_NetMessageData tmpNetMessageData = new Event_NetMessageData();
+                            tmpNetMessageData._eventType = _socketData._protocalType;
                             tmpNetMessageData._eventData = _socketData._data;
 
                             //锁死消息中心消息队列，并添加数据
@@ -174,91 +145,6 @@ namespace UnityStandardUtils.Web.SocketStuff
             }
         }
 
-
-
-
-
-        /// <summary>
-        /// 数据转网络结构
-        /// </summary>
-        /// <param name="_protocalType"></param>
-        /// <param name="_data"></param>
-        /// <returns></returns>
-        private sSocketData BytesToSocketData(int _protocalType, byte[] _data)
-        {
-            sSocketData tmpSocketData = new sSocketData();
-            tmpSocketData._buffLength = Constants.HEAD_LEN + _data.Length;
-            tmpSocketData._dataLength = _data.Length;
-            tmpSocketData._protocallType = _protocalType;
-            tmpSocketData._data = _data;
-            return tmpSocketData;
-        }
-
-        /// <summary>
-        /// 网络结构转数据
-        /// </summary>
-        /// <param name="tmpSocketData"></param>
-        /// <returns></returns>
-        private byte[] SocketDataToBytes(sSocketData tmpSocketData)
-        {
-            byte[] _tmpBuff = new byte[tmpSocketData._buffLength];
-            byte[] _tmpBuffLength = BitConverter.GetBytes(tmpSocketData._buffLength);
-            byte[] _tmpDataLenght = BitConverter.GetBytes((UInt16)tmpSocketData._protocallType);
-
-            Array.Copy(_tmpBuffLength, 0, _tmpBuff, 0, Constants.HEAD_DATA_LEN);//缓存总长度
-            Array.Copy(_tmpDataLenght, 0, _tmpBuff, Constants.HEAD_DATA_LEN, Constants.HEAD_TYPE_LEN);//协议类型
-            Array.Copy(tmpSocketData._data, 0, _tmpBuff, Constants.HEAD_LEN, tmpSocketData._dataLength);//协议数据
-
-            return _tmpBuff;
-        }
-
-        /// <summary>
-        /// 合并协议，数据
-        /// </summary>
-        /// <param name="_protocalType"></param>
-        /// <param name="_data"></param>
-        /// <returns></returns>
-        private byte[] DataToBytes(int _protocalType, byte[] _data)
-        {
-            return SocketDataToBytes(BytesToSocketData(_protocalType, _data));
-        }
-
-
-        /// <summary>
-        /// ProtoBuf序列化
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static byte[] ProtoBuf_Serializer(ProtoBuf.IExtensible data)
-        {
-            using (MemoryStream m = new MemoryStream())
-            {
-                byte[] buffer = null;
-                Serializer.Serialize(m, data);
-                m.Position = 0;
-                int length = (int)m.Length;
-                buffer = new byte[length];
-                m.Read(buffer, 0, length);
-                return buffer;
-            }
-        }
-
-        /// <summary>
-        /// ProtoBuf反序列化
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="_data"></param>
-        /// <returns></returns>
-        public static T ProtoBuf_Deserialize<T>(byte[] _data)
-        {
-            using (MemoryStream m = new MemoryStream(_data))
-            {
-                return Serializer.Deserialize<T>(m);
-            }
-        }
-
-
-
         /// <summary>
         /// 连接服务器
         /// </summary>
@@ -279,42 +165,38 @@ namespace UnityStandardUtils.Web.SocketStuff
         /// </summary>
         /// <param name="_protocalType"></param>
         /// <param name="_data"></param>
-        private void SendMsgBase(int _protocalType, byte[] _data)
+        internal void SendMsgBase(int _protocalType, byte[] _data)
         {
             if (clientSocket == null || !clientSocket.Connected)
             {
-                _ReConnect();
                 return;
             }
 
-            byte[] _msgdata = DataToBytes(_protocalType, _data);
+            byte[] _msgdata = PkgStruct.SocketDataToBytes(PkgStruct.BytesToSocketData(_protocalType, _data));
             clientSocket.BeginSend(_msgdata, 0, _msgdata.Length, SocketFlags.None, new AsyncCallback(_onSendMsg), clientSocket);
         }
 
         /// <summary>
-        /// 以二进制方式发送
+        /// 断开
         /// </summary>
-        /// <param name="_protocalType"></param>
-        /// <param name="_byteStreamBuff"></param>
-        internal void SendMsg(int _protocalType, ByteStreamBuff _byteStreamBuff)
-        {
-            SendMsgBase(_protocalType, _byteStreamBuff.ToArray());
-        }
-
-        /// <summary>
-        /// 以ProtoBuf方式发送
-        /// </summary>
-        /// <param name="_protocalType"></param>
-        /// <param name="data"></param>
-        internal void SendMsg(int _protocalType, ProtoBuf.IExtensible data)
-        {
-            SendMsgBase(_protocalType, ProtoBuf_Serializer(data));
-        }
-
         internal void Close()
         {
-            _close();
-        }
+            if (!_isConnected)
+                return;
 
+            _isConnected = false;
+
+            if (receiveThread != null)
+            {
+                receiveThread.Abort();
+                receiveThread = null;
+            }
+
+            if (clientSocket != null && clientSocket.Connected)
+            {
+                clientSocket.Close();
+                clientSocket = null;
+            }
+        }
     }
 }

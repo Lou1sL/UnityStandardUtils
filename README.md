@@ -1,6 +1,10 @@
 ﻿# UnityStandardUtils
 
+
 Unity基础工具库
+
+
+---
 
 
 提供了Unity开发的一些常用功能：
@@ -20,6 +24,8 @@ Unity基础工具库
 玩家背包模拟
 
 
+---
+
 
 此外还有方便网游开发的UnityStandardUtils.Web：
 
@@ -28,12 +34,16 @@ HttpRequest:POST，GET请求
 SocketStuff引擎:资磁protobuf的高易用Socket客户/服务器端（服务器端可独立运行或包含在游戏内）
 
 
+---
+
+
 使用请打包dll，并和Newtonsoft.Json放在项目Asset目录下
 
 如果要使用独立的SocketStuff引擎，项目里添加对本dll的引用即可
 
-
+---
 [具体使用方法请查看Wiki](https://github.com/RyuBAI/UnityStandardUtils/wiki)
+---
 
 
 欢迎fork

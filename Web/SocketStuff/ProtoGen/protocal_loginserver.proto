@@ -1,5 +1,0 @@
-message CS_LOGINSERVER  
-{  
-	required string account = 1;  //ÕËºÅ  
-	required string password = 2; //ÃÜÂë
-} 

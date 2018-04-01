@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>Reference\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -57,10 +60,11 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="Web\HttpRequest.cs" />
     <Compile Include="Web\SocketStuff\Client.cs" />
+    <Compile Include="Web\SocketStuff\InternalSrc\Server\DataBase.cs" />
     <Compile Include="Web\SocketStuff\Server.cs" />
-    <Compile Include="Web\SocketStuff\Socket\MessageCenter.cs" />
-    <Compile Include="Web\SocketStuff\Socket\PackageStructure.cs" />
-    <Compile Include="Web\SocketStuff\Socket\SocketManager.cs" />
+    <Compile Include="Web\SocketStuff\InternalSrc\Client\ClientMessageCenter.cs" />
+    <Compile Include="Web\SocketStuff\InternalSrc\PackageStructure.cs" />
+    <Compile Include="Web\SocketStuff\InternalSrc\Client\ClientSocketManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reference\" />

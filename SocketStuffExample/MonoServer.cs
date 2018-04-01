@@ -32,11 +32,13 @@ public class MonoServer:MonoBehaviour
             byte[] repackage = PkgStruct.SocketDataToBytes(socketData);
             myClientSocket.Send(repackage, repackage.Length, 0);
         });
+
+        server.Start();
     }
 
     void OnApplicationQuit()
     {
-        server.Stop();
+        server.GentleStop();
     }
 
 

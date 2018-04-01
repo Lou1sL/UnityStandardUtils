@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System;
+using System.Diagnostics;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
@@ -9,15 +10,22 @@ namespace UnityStandardUtils.Web.SocketStuff
 
     public class Server
     {
-
-        private static Socket serverSocket;
-        private Thread myThread;
+        private static IPAddress ip;
+        private static int port;
         private static event MessageHandler messageHandle;
 
+
+        private static Socket serverSocket;
+        private static Thread listenClientThread;
+        
+        /// <summary>
+        /// 设置服务器参数
+        /// </summary>
+        /// <param name="IP"></param>
+        /// <param name="Port"></param>
+        /// <param name="messageHandler"></param>
         public Server(string IP, int Port, MessageHandler messageHandler)
         {
-
-
             Console.WriteLine("-----------------------------------------------------------------------------------");
             Console.WriteLine("-----------------------------SocketStuff Server Engine-----------------------------");
             Console.WriteLine("-----------------------------               By RyuBAI -----------------------------");
@@ -25,18 +33,11 @@ namespace UnityStandardUtils.Web.SocketStuff
             Console.WriteLine();
 
 
+            ip = IPAddress.Parse(IP);
+            port = Port;
             messageHandle = messageHandler;
-            //服务器IP地址  
-            IPAddress ip = IPAddress.Parse(IP);
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(new IPEndPoint(ip, Port));  //绑定IP地址：端口  
-            serverSocket.Listen(10);    //设定最多10个排队连接请求  
-                                        //通过Clientsoket发送数据
-            myThread = new Thread(ListenClientConnect);
-            myThread.Start();
-            
-            Console.WriteLine(">Srv Start");
-            Console.ReadLine();
+
+
         }
 
         /// <summary>  
@@ -49,7 +50,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                 Socket clientSocket = serverSocket.Accept();
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
-                Console.WriteLine(">Client Connected From("+clientSocket.RemoteEndPoint.ToString()+")");
+                Console.WriteLine(">Client Connected From(" + clientSocket.RemoteEndPoint.ToString() + ")");
             }
         }
 
@@ -61,7 +62,7 @@ namespace UnityStandardUtils.Web.SocketStuff
         /// <summary>  
         /// 接收消息
         /// </summary>  
-        /// <param name="clientSocket"></param>  
+        /// <param name="clientSocket"></param>
         private static void ReceiveMessage(object clientSocket)
         {
             Socket myClientSocket = (Socket)clientSocket;
@@ -82,7 +83,6 @@ namespace UnityStandardUtils.Web.SocketStuff
                         //取出一条完整数据
                         while (_databuffer.GetData(out _socketData))
                         {
-
                             Console.WriteLine(">Calling Handler");
                             messageHandle?.Invoke(myClientSocket, _socketData);
                         }
@@ -100,18 +100,31 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         }
 
-        public void Stop()
+        public void Start()
         {
+            GentleStop();
 
-            if (myThread != null)
-            {
-                myThread.Abort();
-                Console.WriteLine(">Srv Stop");
-                myThread = null;
-            }
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket.Bind(new IPEndPoint(ip, port));  //绑定IP地址：端口  
+            serverSocket.Listen(10);    //设定最多10个排队连接请求  
+                                        //通过Clientsoket发送数据
+            listenClientThread = new Thread(ListenClientConnect);
+            listenClientThread.Start();
+
+            Console.WriteLine(">Srv Start");
         }
 
+        public void GentleStop()
+        {
+            if (listenClientThread != null)
+            {
+                Console.WriteLine(">Srv Trying To Gentlely Stopping...");
 
+                listenClientThread.Abort();
+                listenClientThread = null;
 
+                serverSocket.Close();
+            }
+        }
     }
 }

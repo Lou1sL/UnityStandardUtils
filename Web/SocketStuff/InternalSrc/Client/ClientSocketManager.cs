@@ -5,57 +5,70 @@ using System;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
-    internal class SocketManager
+    internal class ClientSocketManager:Singleton<ClientSocketManager>
     {
-        private static SocketManager _instance;
-        internal static SocketManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new SocketManager();
-                }
-                return _instance;
-            }
-        }
+
         private string _currIP;
         private int _currPort;
 
         private bool _isConnected = false;
         internal bool IsConnceted { get { return _isConnected; } }
+
         private Socket clientSocket = null;
         private Thread receiveThread = null;
 
-        private PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
+        
 
         byte[] _tmpReceiveBuff = new byte[4096];
+        private PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
         private PkgStruct.SocketData _socketData = new PkgStruct.SocketData();
 
-        
+
+
         /// <summary>
-        /// 连接
+        /// 连接服务器
         /// </summary>
-        private void _onConnet()
+        /// <param name="_currIP"></param>
+        /// <param name="_currPort"></param>
+        internal void Connect(string _currIP, int _currPort)
         {
-            try
+            if (!IsConnceted)
             {
-                clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//创建套接字
-                IPAddress ipAddress = IPAddress.Parse(_currIP);//解析IP地址
-                IPEndPoint ipEndpoint = new IPEndPoint(ipAddress, _currPort);
-                IAsyncResult result = clientSocket.BeginConnect(ipEndpoint, new AsyncCallback(_onConnect_Sucess), clientSocket);//异步连接
-                bool success = result.AsyncWaitHandle.WaitOne(5000, true);
-                if (!success) //超时
+                this._currIP = _currIP;
+                this._currPort = _currPort;
+
+
+                try
                 {
-                    _onConnect_Outtime();
+                    //创建套接字
+                    clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    //解析IP地址
+                    IPAddress ipAddress = IPAddress.Parse(_currIP);
+                    IPEndPoint ipEndpoint = new IPEndPoint(ipAddress, _currPort);
+                    //异步连接
+                    IAsyncResult result = clientSocket.BeginConnect(ipEndpoint, new AsyncCallback(_onConnect_Sucess), clientSocket);
+                    bool success = result.AsyncWaitHandle.WaitOne(5000, true);
+
+                    if (!success)
+                    {
+                        //超时
+                        Close();
+                    }
                 }
-            }
-            catch (System.Exception _e)
-            {
-                _onConnect_Fail();
+                catch (System.Exception _e)
+                {
+                    //失败
+                    Close();
+                }
+
+
             }
         }
 
+        /// <summary>
+        /// 连接成功，建立接受线程
+        /// </summary>
+        /// <param name="iar"></param>
         private void _onConnect_Sucess(IAsyncResult iar)
         {
             try
@@ -75,35 +88,8 @@ namespace UnityStandardUtils.Web.SocketStuff
             }
         }
 
-        private void _onConnect_Outtime()
-        {
-            Close();
-        }
-
-        private void _onConnect_Fail()
-        {
-            Close();
-        }
-
         /// <summary>
-        /// 发送消息结果回掉，可判断当前网络状态
-        /// </summary>
-        /// <param name="asyncSend"></param>
-        private void _onSendMsg(IAsyncResult asyncSend)
-        {
-            try
-            {
-                Socket client = (Socket)asyncSend.AsyncState;
-                client.EndSend(asyncSend);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("send msg exception:" + e.StackTrace);
-            }
-        }
-
-        /// <summary>
-        /// 接受网络数据
+        /// 接受网络数据，将接受到的放入消息队列
         /// </summary>
         private void _onReceiveSocket()
         {
@@ -119,18 +105,15 @@ namespace UnityStandardUtils.Web.SocketStuff
                     int receiveLength = clientSocket.Receive(_tmpReceiveBuff);
                     if (receiveLength > 0)
                     {
-                        _databuffer.AddBuffer(_tmpReceiveBuff, receiveLength);//将收到的数据添加到缓存器中
-                        while (_databuffer.GetData(out _socketData))//取出一条完整数据
+                        //将收到的数据添加到缓存器中
+                        _databuffer.AddBuffer(_tmpReceiveBuff, receiveLength);
+                        //取出一条完整数据
+                        while (_databuffer.GetData(out _socketData))
                         {
-                            Event_NetMessageData tmpNetMessageData = new Event_NetMessageData();
-                            tmpNetMessageData._eventType = _socketData._protocalType;
-                            tmpNetMessageData._eventData = _socketData._data;
-
                             //锁死消息中心消息队列，并添加数据
-                            lock (MessageCenter.Instance._netMessageDataQueue)
+                            lock (ClientMessageCenter.Instance._netMessageDataQueue)
                             {
-                                Console.WriteLine(tmpNetMessageData._eventType);
-                                MessageCenter.Instance._netMessageDataQueue.Enqueue(tmpNetMessageData);
+                                ClientMessageCenter.Instance._netMessageDataQueue.Enqueue(_socketData);
                             }
                         }
                     }
@@ -144,22 +127,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                 }
             }
         }
-
-        /// <summary>
-        /// 连接服务器
-        /// </summary>
-        /// <param name="_currIP"></param>
-        /// <param name="_currPort"></param>
-        internal void Connect(string _currIP, int _currPort)
-        {
-            if (!IsConnceted)
-            {
-                this._currIP = _currIP;
-                this._currPort = _currPort;
-                _onConnet();
-            }
-        }
-
+        
         /// <summary>
         /// 发送消息基本方法
         /// </summary>
@@ -174,6 +142,23 @@ namespace UnityStandardUtils.Web.SocketStuff
 
             byte[] _msgdata = PkgStruct.SocketDataToBytes(PkgStruct.BytesToSocketData(_protocalType, _data));
             clientSocket.BeginSend(_msgdata, 0, _msgdata.Length, SocketFlags.None, new AsyncCallback(_onSendMsg), clientSocket);
+        }
+
+        /// <summary>
+        /// 发送消息结果回调，可判断当前网络状态
+        /// </summary>
+        /// <param name="asyncSend"></param>
+        private void _onSendMsg(IAsyncResult asyncSend)
+        {
+            try
+            {
+                Socket client = (Socket)asyncSend.AsyncState;
+                client.EndSend(asyncSend);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("send msg exception:" + e.StackTrace);
+            }
         }
 
         /// <summary>

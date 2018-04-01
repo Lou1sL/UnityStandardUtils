@@ -6,6 +6,7 @@ public class GameConst
 {
     public const string IP = "192.168.1.102";
     public const int Port = 9876;
+    
 }
 
 

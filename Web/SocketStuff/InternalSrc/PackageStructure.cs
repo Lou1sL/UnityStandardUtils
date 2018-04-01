@@ -4,10 +4,11 @@ using System.Text;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
-    
     public class PkgStruct
     {
-        //常量数据
+        /// <summary>
+        /// 计算用常量
+        /// </summary>
         private class Constants
         {
             //消息：数据总长度(4byte) + 数据类型(2byte) + 数据(N byte)
@@ -310,9 +311,7 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         }
 
-
-
-
+        
         /// <summary>
         /// 数据转网络结构
         /// </summary>
@@ -382,7 +381,6 @@ namespace UnityStandardUtils.Web.SocketStuff
             }
         }
 
-        
     }
 
     

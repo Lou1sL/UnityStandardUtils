@@ -10,17 +10,12 @@ using System.Collections.Generic;
 namespace UnityStandardUtils.Web.SocketStuff
 {
 
-    internal struct Event_NetMessageData
-    {
-        public int _eventType;
-        public byte[] _eventData;
-    }
     public delegate void Callback_NetMessage_Handle(byte[] _data);
 
-    public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
+    public class ClientMessageCenter : SingletonMonoBehaviour<ClientMessageCenter>
     {
         private Dictionary<int, Callback_NetMessage_Handle> _netMessage_EventList = new Dictionary<int, Callback_NetMessage_Handle>();
-        internal Queue<Event_NetMessageData> _netMessageDataQueue = new Queue<Event_NetMessageData>();
+        internal Queue<PkgStruct.SocketData> _netMessageDataQueue = new Queue<PkgStruct.SocketData>();
 
         //添加网络事件观察者
         internal void addObserver(int protocalType, Callback_NetMessage_Handle callback)
@@ -53,10 +48,10 @@ namespace UnityStandardUtils.Web.SocketStuff
             {
                 lock (_netMessageDataQueue)
                 {
-                    Event_NetMessageData tmpNetMessageData = _netMessageDataQueue.Dequeue();
-                    if (_netMessage_EventList.ContainsKey(tmpNetMessageData._eventType))
+                    PkgStruct.SocketData tmpNetMessageData = _netMessageDataQueue.Dequeue();
+                    if (_netMessage_EventList.ContainsKey(tmpNetMessageData._protocalType))
                     {
-                        _netMessage_EventList[tmpNetMessageData._eventType](tmpNetMessageData._eventData);
+                        _netMessage_EventList[tmpNetMessageData._protocalType](tmpNetMessageData._data);
                     }
                 }
             }

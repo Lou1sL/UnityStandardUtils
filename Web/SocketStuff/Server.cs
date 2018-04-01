@@ -6,25 +6,27 @@ using System.Diagnostics;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
-    public delegate void MessageHandler(Socket clientSocket, PkgStruct.SocketData socketData);
+    public delegate PkgStruct.SocketData MessageHandler(Socket clientSocket, PkgStruct.SocketData socketData);
 
     public class Server
     {
-        private static IPAddress ip;
-        private static int port;
-        private static event MessageHandler messageHandle;
+        private IPAddress ip;
+        private int port;
+        private int tick;
+        private event MessageHandler messageHandle;
 
 
-        private static Socket serverSocket;
-        private static Thread listenClientThread;
-        
+        private Socket serverSocket;
+        private Thread listenClientThread;
+
         /// <summary>
         /// 设置服务器参数
         /// </summary>
-        /// <param name="IP"></param>
-        /// <param name="Port"></param>
+        /// <param name="IP">服务器绑定的IP</param>
+        /// <param name="Port">绑定端口</param>
+        /// <param name="Tick">时钟频率，小于等于0时</param>
         /// <param name="messageHandler"></param>
-        public Server(string IP, int Port, MessageHandler messageHandler)
+        public Server(string IP, int Port,int Tick, MessageHandler messageHandler)
         {
             Console.WriteLine("-----------------------------------------------------------------------------------");
             Console.WriteLine("-----------------------------SocketStuff Server Engine-----------------------------");
@@ -35,9 +37,8 @@ namespace UnityStandardUtils.Web.SocketStuff
 
             ip = IPAddress.Parse(IP);
             port = Port;
+            tick = Tick;
             messageHandle = messageHandler;
-
-
         }
 
         /// <summary>  
@@ -50,20 +51,20 @@ namespace UnityStandardUtils.Web.SocketStuff
                 Socket clientSocket = serverSocket.Accept();
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
-                Console.WriteLine(">Client Connected From(" + clientSocket.RemoteEndPoint.ToString() + ")");
+                _writeConsole(clientSocket.RemoteEndPoint.ToString(), "Connected");
             }
         }
 
 
-        private static byte[] resultBuffer = new byte[1024];
-        private static PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
-        private static PkgStruct.SocketData _socketData = new PkgStruct.SocketData();
+        private byte[] resultBuffer = new byte[1024];
+        private PkgStruct.DataBuffer _databuffer = new PkgStruct.DataBuffer();
+        private PkgStruct.SocketData _socketData = new PkgStruct.SocketData();
 
         /// <summary>  
         /// 接收消息
         /// </summary>  
         /// <param name="clientSocket"></param>
-        private static void ReceiveMessage(object clientSocket)
+        private void ReceiveMessage(object clientSocket)
         {
             Socket myClientSocket = (Socket)clientSocket;
             string ClientDetail = myClientSocket.RemoteEndPoint.ToString();
@@ -75,22 +76,43 @@ namespace UnityStandardUtils.Web.SocketStuff
                     int receiveLength = myClientSocket.Receive(resultBuffer);
                     if (receiveLength > 0)
                     {
-                        Console.WriteLine(">RcvMsg From(" + ClientDetail + ") & Len =(" + receiveLength + ")");
-
 
                         //将收到的数据添加到缓存器中
                         _databuffer.AddBuffer(resultBuffer, receiveLength);
                         //取出一条完整数据
                         while (_databuffer.GetData(out _socketData))
                         {
-                            Console.WriteLine(">Calling Handler");
-                            messageHandle?.Invoke(myClientSocket, _socketData);
+                            //如果数据属于内部协议
+                            if (Enum.IsDefined(typeof(PkgStruct.InternalProtocol), _socketData._protocalType))
+                            {
+                                if(_socketData._protocalType == (int)PkgStruct.InternalProtocol.RequestServerTick)
+                                {
+                                    _writeConsole(ClientDetail, "Requesting Server Tick Rate,Which is (" + tick + ")");
+                                    PkgStruct.ByteStreamBuff _tmpbuff = new PkgStruct.ByteStreamBuff();
+                                    _tmpbuff.Write_Int(tick);
+                                    byte[] repackage = PkgStruct.SocketDataToBytes(PkgStruct.BytesToSocketData((int)PkgStruct.InternalProtocol.ServerTick, _tmpbuff.ToArray()));
+                                    myClientSocket.Send(repackage, repackage.Length, 0);
+                                }
+                            }
+                            else
+                            {
+                                _writeConsole(ClientDetail, "Calling Handler");
+                                if (messageHandle != null)
+                                {
+                                    byte[] repackage = PkgStruct.SocketDataToBytes(messageHandle(myClientSocket, _socketData));
+                                    myClientSocket.Send(repackage, repackage.Length, 0);
+                                }
+                                else
+                                {
+                                    _writeConsole(ClientDetail, "No Handler,Doing Nothing Now...");
+                                }
+                            }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(">Client Droped From(" + ClientDetail + ")" + " With Reason (" + ex.Message + ")");
+                    _writeConsole(ClientDetail, "Client Droped With Reason (" + ex.Message + ")");
                     myClientSocket.Shutdown(SocketShutdown.Both);
                     myClientSocket.Close();
                     break;
@@ -99,6 +121,8 @@ namespace UnityStandardUtils.Web.SocketStuff
 
 
         }
+
+        
 
         public void Start()
         {
@@ -111,20 +135,33 @@ namespace UnityStandardUtils.Web.SocketStuff
             listenClientThread = new Thread(ListenClientConnect);
             listenClientThread.Start();
 
-            Console.WriteLine(">Srv Start");
+            _writeConsole("Srv", "Srv Start");
         }
 
         public void GentleStop()
         {
             if (listenClientThread != null)
             {
-                Console.WriteLine(">Srv Trying To Gentlely Stopping...");
+                _writeConsole("Srv", "Trying To Gentlely Stopping...");
 
                 listenClientThread.Abort();
                 listenClientThread = null;
 
                 serverSocket.Close();
             }
+        }
+
+
+
+
+        /// <summary>
+        /// 输出控制台
+        /// </summary>
+        /// <param name="clientDetail"></param>
+        /// <param name="Msg"></param>
+        private static void _writeConsole(string clientDetail,string Msg)
+        {
+            Console.WriteLine(">" + clientDetail + " => " + Msg);
         }
     }
 }

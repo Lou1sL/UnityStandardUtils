@@ -7,12 +7,8 @@ namespace UnityStandardUtils.Web.SocketStuff
 {
     internal class ClientSocketManager:Singleton<ClientSocketManager>
     {
-
-        private string _currIP;
-        private int _currPort;
-
         private bool _isConnected = false;
-        internal bool IsConnceted { get { return _isConnected; } }
+        internal bool IsConnceted => _isConnected;
 
         private Socket clientSocket = null;
         private Thread receiveThread = null;
@@ -34,10 +30,6 @@ namespace UnityStandardUtils.Web.SocketStuff
         {
             if (!IsConnceted)
             {
-                this._currIP = _currIP;
-                this._currPort = _currPort;
-
-
                 try
                 {
                     //创建套接字
@@ -80,12 +72,23 @@ namespace UnityStandardUtils.Web.SocketStuff
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
                 _isConnected = true;
-                Console.WriteLine("Connection Established!");
+                //Console.WriteLine("Connection Established!");
+
+
+                _requestServerTick();
             }
             catch (Exception _e)
             {
                 Close();
             }
+        }
+
+        /// <summary>
+        /// 连接成功第一时间获取Tick
+        /// </summary>
+        private void _requestServerTick()
+        {
+            SendMsgBase((int)PkgStruct.InternalProtocol.RequestServerTick, new byte[] { Convert.ToByte('A') });
         }
 
         /// <summary>
@@ -110,10 +113,24 @@ namespace UnityStandardUtils.Web.SocketStuff
                         //取出一条完整数据
                         while (_databuffer.GetData(out _socketData))
                         {
-                            //锁死消息中心消息队列，并添加数据
-                            lock (ClientMessageCenter.Instance._netMessageDataQueue)
+
+                            //如果数据属于内部协议
+                            if(Enum.IsDefined(typeof(PkgStruct.InternalProtocol), _socketData._protocalType))
                             {
-                                ClientMessageCenter.Instance._netMessageDataQueue.Enqueue(_socketData);
+                                if (_socketData._protocalType == (int)PkgStruct.InternalProtocol.ServerTick)
+                                {
+                                    PkgStruct.ByteStreamBuff _tmpbuff = new PkgStruct.ByteStreamBuff(_socketData._data);
+                                    Client.SetServerTick = _tmpbuff.Read_Int();
+                                    _tmpbuff.Close();
+                                }
+                            }
+                            else
+                            {
+                                //锁死消息中心消息队列，并添加数据
+                                lock (ClientMessageCenter.Instance._netMessageDataQueue)
+                                {
+                                    ClientMessageCenter.Instance._netMessageDataQueue.Enqueue(_socketData);
+                                }
                             }
                         }
                     }
@@ -157,7 +174,7 @@ namespace UnityStandardUtils.Web.SocketStuff
             }
             catch (Exception e)
             {
-                Console.WriteLine("send msg exception:" + e.StackTrace);
+                //Console.WriteLine("send msg exception:" + e.StackTrace);
             }
         }
 

@@ -7,6 +7,17 @@ namespace UnityStandardUtils.Web.SocketStuff
     public class PkgStruct
     {
         /// <summary>
+        /// 内部报文格式
+        /// </summary>
+        internal enum InternalProtocol
+        {
+            Ping = 0xF000,
+            RequestServerTick = 0xF001,
+            ServerTick = 0xF002,
+            TestHelloWorld = 0xFFFF,
+        }
+
+        /// <summary>
         /// 计算用常量
         /// </summary>
         private class Constants

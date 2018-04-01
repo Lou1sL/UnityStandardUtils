@@ -14,6 +14,8 @@ namespace UnityStandardUtils.Web.SocketStuff
 
     public class ClientMessageCenter : SingletonMonoBehaviour<ClientMessageCenter>
     {
+
+
         private Dictionary<int, Callback_NetMessage_Handle> _netMessage_EventList = new Dictionary<int, Callback_NetMessage_Handle>();
         internal Queue<PkgStruct.SocketData> _netMessageDataQueue = new Queue<PkgStruct.SocketData>();
 
@@ -22,6 +24,9 @@ namespace UnityStandardUtils.Web.SocketStuff
         {
             if (_netMessage_EventList.ContainsKey(protocalType))
             {
+                //知识点
+                //无返回值的委托，你给它注册多少个方法，它就执行多少个方法
+                //而有返回值的委托，同样注册多少个方法就执行多少个方法，！！！！但返回的是最后一个方法的返回值！！！！
                 _netMessage_EventList[protocalType] += callback;
             }
             else
@@ -56,7 +61,5 @@ namespace UnityStandardUtils.Web.SocketStuff
                 }
             }
         }
-
-        
     }
 }

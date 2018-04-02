@@ -26,5 +26,5 @@ public enum ProtocalCommand
     sc_protobuf_login = 0x2000,
 
 
-    position = 0x3000,
+    player_position = 0x3000,
 }

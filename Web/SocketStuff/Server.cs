@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace UnityStandardUtils.Web.SocketStuff
 {
     public delegate PkgStruct.SocketData MessageHandler(Socket clientSocket, PkgStruct.SocketData socketData);
-
+    
     public class Server
     {
         private IPAddress ip;
@@ -93,10 +93,12 @@ namespace UnityStandardUtils.Web.SocketStuff
                                     byte[] repackage = PkgStruct.SocketDataToBytes(PkgStruct.BytesToSocketData((int)PkgStruct.InternalProtocol.ServerTick, _tmpbuff.ToArray()));
                                     myClientSocket.Send(repackage, repackage.Length, 0);
                                 }
+
+
                             }
                             else
                             {
-                                _writeConsole(ClientDetail, "Calling Handler");
+                                //_writeConsole(ClientDetail, "Calling Handler");
                                 if (messageHandle != null)
                                 {
                                     byte[] repackage = PkgStruct.SocketDataToBytes(messageHandle(myClientSocket, _socketData));
@@ -104,7 +106,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                                 }
                                 else
                                 {
-                                    _writeConsole(ClientDetail, "No Handler,Doing Nothing Now...");
+                                    //_writeConsole(ClientDetail, "No Handler,Doing Nothing Now...");
                                 }
                             }
                         }
@@ -115,6 +117,9 @@ namespace UnityStandardUtils.Web.SocketStuff
                     _writeConsole(ClientDetail, "Client Droped With Reason (" + ex.Message + ")");
                     myClientSocket.Shutdown(SocketShutdown.Both);
                     myClientSocket.Close();
+
+                    //throw ex;
+
                     break;
                 }
             }

@@ -3,8 +3,12 @@ using System.Threading;
 
 namespace UnityStandardUtils.Web.SocketStuff
 {
+    public delegate Q TickMsgPasser<Q>();
+
+
     public static class Client
     {
+        public static bool IsConnected => ClientSocketManager.Instance.IsConnceted;
 
         private static int _serverTick = 0;
         public static int ServerTick => _serverTick;
@@ -28,46 +32,43 @@ namespace UnityStandardUtils.Web.SocketStuff
 
 
         /// <summary>
-        /// 以ProtoBuf方式发送
+        /// 发送
         /// </summary>
         /// <param name="_protocalType"></param>
         /// <param name="data"></param>
-        public static void SendMsg<T>(T cmd, ProtoBuf.IExtensible data)
+        public static void SendMsg<T,Q>(T cmd, Q data)
         {
-            CheckEnum<T>();
-            ClientSocketManager.Instance.SendMsgBase((int)(object)cmd, PkgStruct.ProtoBuf_Serializer(data));
-        }
+            if (!IsConnected) return;
 
-        /// <summary>
-        /// 以二进制方式发送
-        /// </summary>
-        /// <param name="_protocalType"></param>
-        /// <param name="_byteStreamBuff"></param>
-        public static void SendMsg<T>(T cmd, PkgStruct.ByteStreamBuff data)
-        {
             CheckEnum<T>();
-            ClientSocketManager.Instance.SendMsgBase((int)(object)cmd, data.ToArray());
+            CheckData(data);
+            byte[] rawData = (data is ProtoBuf.IExtensible) ? PkgStruct.ProtoBuf_Serializer((ProtoBuf.IExtensible)data):
+                ((PkgStruct.ByteStreamBuff)(object)data).ToArray();
+
+            ClientSocketManager.Instance.SendMsgBase((int)(object)cmd, rawData);
         }
 
 
 
         private static Thread _tickMsgThread;
+        public static bool IsTickingMsgSending => (_tickMsgThread != null);
         /// <summary>
         /// 二进制Tick发送
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="cmd"></param>
         /// <param name="data"></param>
-        public static void SendTickMsg<T>(T cmd, ref PkgStruct.ByteStreamBuff data)
+        public static void SendTickMsg<T,Q>(T cmd, TickMsgPasser<Q> tickMsgPasser)
         {
-            PkgStruct.ByteStreamBuff _data = data;
-            if (ServerTick <= 0) return;
+            if (IsConnected && ServerTick <= 0) throw new System.Exception("Server Isn't Ticked!!");
             _tickMsgThread = new Thread(delegate()
             {
                 while (true)
                 {
-                    CheckEnum<T>();
-                    ClientSocketManager.Instance.SendMsgBase((int)(object)cmd, _data.ToArray());
+                    if (tickMsgPasser != null)
+                    {
+                        SendMsg(cmd, tickMsgPasser());
+                    }
                     Thread.Sleep((int)(1f / (ServerTick) * 1000));
                 }
             });
@@ -76,8 +77,12 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         public static void StopTickMsg()
         {
-            _tickMsgThread.Abort();
-            _tickMsgThread = null;
+            if (_tickMsgThread != null)
+            {
+                _tickMsgThread.Abort();
+                _tickMsgThread = null;
+            }
+            
         }
 
 
@@ -96,9 +101,14 @@ namespace UnityStandardUtils.Web.SocketStuff
 
         private static void CheckEnum<T>()
         {
-            if (!typeof(T).IsEnum) throw new System.ArgumentException("Please use Enum for command Base!");
+            if (!typeof(T).IsEnum)
+                throw new System.ArgumentException("Please use Enum for Command !");
         }
-
+        private static void CheckData<Q>(Q data)
+        {
+            if(!(data is PkgStruct.ByteStreamBuff) && !(data is ProtoBuf.IExtensible))
+                throw new System.ArgumentException("Please use ProtoBuf.IExtensible or PkgStruct.ByteStreamBuff for Data Type!");
+        }
 
 
 

@@ -71,7 +71,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                 receiveThread = new Thread(new ThreadStart(_onReceiveSocket));
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
-                _isConnected = true;
+                //_isConnected = true;
                 //Console.WriteLine("Connection Established!");
 
 
@@ -122,6 +122,8 @@ namespace UnityStandardUtils.Web.SocketStuff
                                     PkgStruct.ByteStreamBuff _tmpbuff = new PkgStruct.ByteStreamBuff(_socketData._data);
                                     Client.SetServerTick = _tmpbuff.Read_Int();
                                     _tmpbuff.Close();
+
+                                    _isConnected = true;
                                 }
                             }
                             else

@@ -8,9 +8,17 @@ namespace SocketStuffExample
     class IndependentServer
     {
         private static Server server = null;
-        
-        private static float AX = 0f;
-        private static float AY = 0f;
+
+        private class PD
+        {
+            public int A = 1000;
+            public int B = 2000;
+            public float AX = 0f;
+            public float AY = 0f;
+            public float BX = 0f;
+            public float BY = 0f;
+        };
+        private static PD pD = new PD();
 
         static void Main(string[] args)
         {
@@ -22,9 +30,10 @@ namespace SocketStuffExample
             //创建服务器
             server = new Server(GameConst.IP, GameConst.Port, GameConst.Tick, delegate (Socket myClientSocket, PkgStruct.SocketData socketData)
             {
-
+                
                 if (socketData._protocalType == (int)ProtocalCommand.sc_protobuf_login)
                 {
+                    
                     gprotocol.CS_LOGINSERVER _tmpLoginServer = PkgStruct.ProtoBuf_Deserialize<gprotocol.CS_LOGINSERVER>(socketData._data);
                     Console.WriteLine(_tmpLoginServer.account);
                     Console.WriteLine(_tmpLoginServer.password);
@@ -41,24 +50,53 @@ namespace SocketStuffExample
                     return socketData;
                 }else if(socketData._protocalType == (int)ProtocalCommand.player_position)
                 {
-                    PkgStruct.ByteStreamBuff RcvData = new PkgStruct.ByteStreamBuff(socketData._data);
-                    try
+                    lock (pD)
                     {
-                        AX = RcvData.Read_Float();
-                        AY = RcvData.Read_Float();
 
-                    }catch(Exception e) {
-                        Console.WriteLine("FUCK"+e.StackTrace);
+                        PkgStruct.ByteStreamBuff RcvData = new PkgStruct.ByteStreamBuff(socketData._data);
+                        int P = 0;
+                        try
+                        {
+                            P = RcvData.Read_Int();
+                            if (P == pD.A)
+                            {
+                                pD.AX = RcvData.Read_Float();
+                                pD.AY = RcvData.Read_Float();
+                            }
+                            if (P == pD.B)
+                            {
+                                pD.BX = RcvData.Read_Float();
+                                pD.BY = RcvData.Read_Float();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("FUCK" + e.StackTrace);
+                        }
+                        RcvData.Close();
+                        RcvData = null;
+
+                        PkgStruct.ByteStreamBuff SendData = new PkgStruct.ByteStreamBuff();
+                        if (P == pD.A)
+                        {
+                            SendData.Write_Float(pD.BX);
+                            SendData.Write_Float(pD.BY);
+                        }
+                        if (P == pD.B)
+                        {
+                            SendData.Write_Float(pD.AX);
+                            SendData.Write_Float(pD.AY);
+                        }
+
+                        return PkgStruct.BytesToSocketData(socketData._protocalType, SendData.ToArray());
+
+
+
+
                     }
-                    RcvData.Close();
-                    RcvData = null;
 
-                    PkgStruct.ByteStreamBuff SendData = new PkgStruct.ByteStreamBuff();
-                    SendData.Write_Float(AX);
-                    SendData.Write_Float(AY);
 
                     
-                    return PkgStruct.BytesToSocketData(socketData._protocalType, SendData.ToArray());
                 }
                 else
                 {

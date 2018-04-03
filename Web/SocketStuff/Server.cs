@@ -118,7 +118,7 @@ namespace UnityStandardUtils.Web.SocketStuff
                     myClientSocket.Shutdown(SocketShutdown.Both);
                     myClientSocket.Close();
 
-                    //throw ex;
+                    throw ex;
 
                     break;
                 }

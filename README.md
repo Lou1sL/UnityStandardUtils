@@ -9,23 +9,23 @@ Unity基础工具库
 
 提供了Unity开发的一些常用功能：
 
-加密编解码
+* 加密编解码
 
-存取档
+* 存取档
 
-语言本地化及对应的可视化编辑器
+* 语言本地化及对应的可视化编辑器
 
-单例MonoBehavior的实现
+* 单例MonoBehavior的实现
 
-可以传参的SceneLoader
+* 可以传参的SceneLoader
 
-键位管理器
+* 键位管理器
 
-玩家背包模拟
+* 玩家背包模拟
 
-简单POST，GET请求
+* 简单POST，GET请求
 
-SocketStuff引擎:（不再维护，更名并转移至[SGNF](https://github.com/RyuBAI/SGNF)项目下）
+* SocketStuff引擎:（不再维护，更名并转移至[SGNF](https://github.com/RyuBAI/SGNF)项目下）
 
 
 ---

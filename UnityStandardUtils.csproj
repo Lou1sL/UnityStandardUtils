@@ -56,15 +56,9 @@
     <Compile Include="SceneLoader.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Web\HttpRequest.cs" />
-    <Compile Include="Web\SocketStuff\Client.cs" />
-    <Compile Include="Web\SocketStuff\Server.cs" />
-    <Compile Include="Web\SocketStuff\InternalSrc\Client\ClientMessageCenter.cs" />
-    <Compile Include="Web\SocketStuff\InternalSrc\PackageStructure.cs" />
-    <Compile Include="Web\SocketStuff\InternalSrc\Client\ClientSocketManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reference\" />
-    <Folder Include="Web\SocketStuff\InternalSrc\Server\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

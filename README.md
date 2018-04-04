@@ -23,23 +23,16 @@ Unity基础工具库
 
 玩家背包模拟
 
+简单POST，GET请求
 
----
-
-
-此外还有方便网游开发的UnityStandardUtils.Web：
-
-HttpRequest:POST，GET请求
-
-SocketStuff引擎:资磁protobuf的高易用Socket客户/服务器端（服务器端可独立运行或包含在游戏内）
+SocketStuff引擎:（不再维护，更名并转移至[SGNF](https://github.com/RyuBAI/SGNF)项目下）
 
 
 ---
 
 
-使用请打包dll，并和Newtonsoft.Json.dll,protobuf-net.dll放在项目Asset目录下
+使用请打包dll，并和Newtonsoft.Json.dll放在项目Asset目录下
 
-如果要使用独立的SocketStuff引擎，项目里添加对本dll的引用即可
 
 ---
 [具体使用方法请查看Wiki](https://github.com/RyuBAI/UnityStandardUtils/wiki)

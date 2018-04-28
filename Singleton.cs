@@ -36,7 +36,8 @@ namespace UnityStandardUtils
         }
     }
 
-    public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
+    //abstract?
+    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
     {
         protected static T sInstance = null;
         protected static bool IsCreate = false;

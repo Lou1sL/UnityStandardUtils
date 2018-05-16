@@ -56,6 +56,7 @@
     <Compile Include="SceneLoader.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Web\HttpRequest.cs" />
+    <Compile Include="Web\RESTful.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reference\" />

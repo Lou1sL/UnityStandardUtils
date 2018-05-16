@@ -25,6 +25,8 @@ Unity基础工具库
 
 * 简单POST，GET请求
 
+* RESTful
+
 * SocketStuff引擎:（不再维护，更名并转移至[SGNF](https://github.com/RyuBAI/SGNF)项目下）
 
 

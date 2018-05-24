@@ -41,12 +41,19 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor">
+      <HintPath>Reference\UnityEditor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Reference\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CC2D\CC2DAITarget.cs" />
+    <Compile Include="CC2D\CC2DKeyboardInput.cs" />
+    <Compile Include="CC2D\CharacterController2D.cs" />
     <Compile Include="Crypto.cs" />
+    <Compile Include="GizmosTool.cs" />
     <Compile Include="InputController.cs" />
     <Compile Include="InventoryManager.cs" />
     <Compile Include="Localization.cs" />

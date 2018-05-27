@@ -49,7 +49,7 @@ namespace UnityStandardUtils.Web
 
         private IEnumerator DoRequest<T>(string uri, Dictionary<string, string> headers, byte[] postdata, Action<T> callback, RESTEncoding encode)
         {
-            var www = postdata == null ? new WWW(uri) : new WWW(uri, postdata, headers == null ? Headers.Defult : headers);
+            var www = postdata == null ? new WWW(uri) : new WWW(uri, postdata, headers ?? Headers.Defult);
             yield return www;
 
             if (string.IsNullOrEmpty(www.error))

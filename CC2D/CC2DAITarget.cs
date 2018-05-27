@@ -30,7 +30,7 @@ namespace UnityStandardUtils.CC2D
 
         [Tooltip("等待喂养AI的序列")]
         [SerializeField]
-        private List<_AITargetObject> AITargetObject;
+        private List<_AITargetObject> AITargetObject = new List<_AITargetObject>();
         private CharacterController2D cc2d;
 
 

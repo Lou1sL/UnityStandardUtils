@@ -115,6 +115,14 @@ namespace UnityStandardUtils.CC2D
         private float defaultScaleX = 1f;
         private GameObject possibleInteracingObject;
 
+        public void SetFaceToward(_FaceToward toward)
+        {
+            if(!IsClimbing)CurrentFaceToward = toward;
+
+            setPlayerToward();
+
+        }
+
         void Start()
         {
             rigidbody2D = GetComponent<Rigidbody2D>();
@@ -455,6 +463,15 @@ namespace UnityStandardUtils.CC2D
         /// </summary>
         private void setPlayerToward()
         {
+            //if (!IsClimbing)
+            //{
+            //    Vector2 dir = VecTool.GetMouseDirection(transform);
+            //    float rotZ = (VecTool.DirectionToRotationZ(dir) + 90f);
+            //    if (rotZ > 0f && rotZ < 180f) SetFaceToward(_FaceToward.Right);
+            //    if (rotZ < 0f || rotZ > 180f) SetFaceToward(_FaceToward.Left);
+            //}
+
+
             if (CurrentFaceToward != DefaultFaceToward)
             {
                 transform.localScale = new Vector3(-defaultScaleX, transform.localScale.y, transform.localScale.z);

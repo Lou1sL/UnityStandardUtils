@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEngine;
+
 
 namespace UnityStandardUtils
 {
@@ -31,7 +29,14 @@ namespace UnityStandardUtils
             if (screenPoint.z > 0) // checks necessary to the text is not visible when the camera is pointed in the opposite direction relative to the object
             {
                 var worldPosition = Camera.current.ScreenToWorldPoint(new Vector3(screenPoint.x - textSize.x * 0.5f, screenPoint.y + textSize.y * 0.5f + yOffset, screenPoint.z));
-                UnityEditor.Handles.Label(worldPosition, textContent, style);
+                
+                
+                
+                //TODO
+                
+                
+                
+                //UnityEditor.Handles.Label(worldPosition, textContent, style);
             }
             GUI.skin = prevSkin;
             //#endif

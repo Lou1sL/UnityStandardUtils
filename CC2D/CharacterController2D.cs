@@ -71,11 +71,11 @@ namespace UnityStandardUtils.CC2D
 
         [Tooltip("角色在冲刺时，针对移动速度的系数")]
         [Range(1f, 5f)]
-        public float SprintMulti = 1.6f;
+        public float SprintSpeedMulti = 1.6f;
 
         [Tooltip("角色在蹲行时，针对移动速度的系数")]
         [Range(0f, 1f)]
-        public float CrouchMulti = 0.3f;
+        public float CrouchSpeedMulti = 0.3f;
 
         [Tooltip("角色在蹲行时，针对碰撞体高度的系数")]
         [Range(0f, 1f)]
@@ -148,7 +148,8 @@ namespace UnityStandardUtils.CC2D
 
             //GetComponent<CapsuleCollider2D>().size = Size;
 
-            GizmosTool.Capsule2D(transform.position, Size, transform.localScale, Color.green);
+            GizmosTool.Capsule2D(transform.position, Size, transform.lossyScale, new Color(0,0.8f,0));
+            GizmosTool.Capsule2D(transform.position, Vector2.Scale(Size,new Vector2(1,CrouchSizeYMulti)), transform.lossyScale, new Color(0, 0.5f, 0));
         }
 
         private void resetInputStatus()
@@ -293,7 +294,7 @@ namespace UnityStandardUtils.CC2D
             if (sprint && (moveLeft || moveRight))
             {
                 animator.SetInteger(AnimatorParameter.ParamName, AnimatorParameter.Sprinting);
-                vx *= SprintMulti;
+                vx *= SprintSpeedMulti;
             }
             if (crouch)
             {
@@ -301,7 +302,7 @@ namespace UnityStandardUtils.CC2D
                 if (moveLeft || moveRight)
                 {
                     animator.SetInteger(AnimatorParameter.ParamName, AnimatorParameter.Crouching);
-                    vx *= CrouchMulti;
+                    vx *= CrouchSpeedMulti;
                 }
                 else
                 {
@@ -309,8 +310,12 @@ namespace UnityStandardUtils.CC2D
                 }
             }
             else collider2D.size = Size;
-
-            rigidbody2D.velocity = new Vector2(vx, rigidbody2D.velocity.y);
+            
+            //注意！！！
+            //velocity属于物理动作，理应存在于FixedUpdate之中
+            //鉴于这里的行为基于信号，又必须在Update中调用
+            //所以折中，利用两者的帧率比值做系数
+            rigidbody2D.velocity = new Vector2(vx*(Time.fixedDeltaTime/Time.deltaTime), rigidbody2D.velocity.y);
 
             if (IsOnGround && InputStatus.Jump)
                 rigidbody2D.AddForce(JumpForce * Vector3.up);

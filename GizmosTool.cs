@@ -33,9 +33,7 @@ namespace UnityStandardUtils
                 
                 
                 //TODO
-                
-                
-                
+
                 //UnityEditor.Handles.Label(worldPosition, textContent, style);
             }
             GUI.skin = prevSkin;

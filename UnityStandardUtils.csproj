@@ -51,9 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CC2D\CC2DAITarget.cs" />
-    <Compile Include="CC2D\CC2DKeyboardInput.cs" />
-    <Compile Include="CC2D\CharacterController2D.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="GizmosTool.cs" />
     <Compile Include="InputController.cs" />

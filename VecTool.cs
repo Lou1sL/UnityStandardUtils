@@ -5,9 +5,9 @@ namespace UnityStandardUtils
 {
     public class VecTool
     {
-        public static Vector2 GetMouseDirection(Transform transform)
+        public static Vector2 GetMouseDirection(Vector3 position)
         {
-            Vector3 v3 = Camera.main.WorldToScreenPoint(transform.position); //将世界坐标转化为屏幕坐标
+            Vector3 v3 = Camera.main.WorldToScreenPoint(position); //将世界坐标转化为屏幕坐标
             Vector2 v2 = new Vector2(v3.x, v3.y);
             Vector2 input = new Vector2(Input.mousePosition.x, Input.mousePosition.y); //取得鼠标点击的屏幕坐标
             return ((input - v2)).normalized;

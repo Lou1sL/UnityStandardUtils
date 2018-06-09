@@ -5,13 +5,31 @@ namespace UnityStandardUtils
 {
     public class VecTool
     {
-        public static Vector2 GetMouseDirection(Vector3 position)
+
+        public static Matrix4x4 ScreenToWorldMatrix(Camera cam)
         {
-            Vector3 v3 = Camera.main.WorldToScreenPoint(position); //将世界坐标转化为屏幕坐标
-            Vector2 v2 = new Vector2(v3.x, v3.y);
-            Vector2 input = new Vector2(Input.mousePosition.x, Input.mousePosition.y); //取得鼠标点击的屏幕坐标
-            return ((input - v2)).normalized;
+            // Make a matrix that converts from
+            // screen coordinates to clip coordinates.
+            var rect = cam.pixelRect;
+            var viewportMatrix = Matrix4x4.Ortho(rect.xMin, rect.xMax, rect.yMin, rect.yMax, -1, 1);
+
+            // The camera's view-projection matrix converts from world coordinates to clip coordinates.
+            var vpMatrix = cam.projectionMatrix * cam.worldToCameraMatrix;
+
+            // Setting column 2 (z-axis) to identity makes the matrix ignore the z-axis.
+            // Instead you get the value on the xy plane!
+            vpMatrix.SetColumn(2, new Vector4(0, 0, 1, 0));
+
+            // Going from right to left:
+            // convert screen coords to clip coords, then clip coords to world coords.
+            return vpMatrix.inverse * viewportMatrix;
         }
+
+        public static Vector2 ScreenToWorldPointPerspective(Vector2 point)
+        {
+            return ScreenToWorldMatrix(Camera.main).MultiplyPoint(point);
+        }
+        
 
         public static Vector2 Vector2Up(Vector2 src)
         {

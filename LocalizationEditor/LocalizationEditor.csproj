@@ -83,8 +83,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnityStandardUtils.csproj">
-      <Project>{f096a8e5-bdcf-4717-9c0a-db3108f1ac98}</Project>
+    <ProjectReference Include="..\UnityStandardUtilsEditor\UnityStandardUtilsEditor.csproj">
+      <Project>{a9d6d206-1f43-498f-9b6a-51d883bbf197}</Project>
+      <Name>UnityStandardUtilsEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnityStandardUtils\UnityStandardUtils.csproj">
+      <Project>{d2645f4e-a048-4683-9cf9-8a38fe822944}</Project>
       <Name>UnityStandardUtils</Name>
     </ProjectReference>
   </ItemGroup>

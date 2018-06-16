@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
-
-namespace UnityStandardUtils
+namespace UnityStandardUtilsEditor
 {
+
     public class GizmosTool
     {
-
         public static void Text(GUISkin guiSkin, string text, Vector3 position, Color? color = null, int fontSize = 0, float yOffset = 0)
         {
-            //#if UNITY_EDITOR
             var prevSkin = GUI.skin;
             if (guiSkin == null)
                 Debug.LogWarning("editor warning: guiSkin parameter is null");
@@ -31,13 +30,9 @@ namespace UnityStandardUtils
                 var worldPosition = Camera.current.ScreenToWorldPoint(new Vector3(screenPoint.x - textSize.x * 0.5f, screenPoint.y + textSize.y * 0.5f + yOffset, screenPoint.z));
                 
                 
-                
-                //TODO
-
-                //UnityEditor.Handles.Label(worldPosition, textContent, style);
+                Handles.Label(worldPosition, textContent, style);
             }
             GUI.skin = prevSkin;
-            //#endif
         }
         public static void Circle(float r,Vector3 center, Color? color=null)
         {

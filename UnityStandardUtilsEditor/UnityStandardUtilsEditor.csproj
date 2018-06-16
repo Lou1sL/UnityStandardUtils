@@ -58,6 +58,14 @@
     <Compile Include="EditorExtension.cs" />
     <Compile Include="GizmosTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyAttribute.cs" />
+    <Compile Include="SceneFieldPropertyDrawer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnityStandardUtils\UnityStandardUtils.csproj">
+      <Project>{D2645F4E-A048-4683-9CF9-8A38FE822944}</Project>
+      <Name>UnityStandardUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

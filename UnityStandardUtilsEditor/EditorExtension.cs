@@ -15,12 +15,14 @@ namespace UnityStandardUtilsEditor
     {
         private static string GetPrefebPath(GameObject go)
         {
-            if (!go) return string.Empty;
-            return AssetDatabase.GetAssetPath(go);
+            if (!go) return null;
+            string s = AssetDatabase.GetAssetPath(go);
+            if (s == string.Empty) return null;
+            return s;
         }
         private static GameObject LoadPrefebPath(string path)
         {
-            if (path == string.Empty || Path.GetExtension(path) != ".prefab") return null;
+            if (path == null || path == string.Empty || Path.GetExtension(path) != ".prefab") return null;
             GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
             return go;
         }

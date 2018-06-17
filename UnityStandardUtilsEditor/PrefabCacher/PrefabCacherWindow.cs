@@ -29,7 +29,7 @@ namespace UnityStandardUtilsEditor
         void OnGUI()
         {
 
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 2 * EditorGUIUtility.singleLineHeight));
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 4 * EditorGUIUtility.singleLineHeight));
 
             GUILayout.Label("Cached Prefabs:" + gmp.GetAllPrefab().Count, GUILayout.Width(EditorGUIUtility.labelWidth));
 
@@ -44,12 +44,15 @@ namespace UnityStandardUtilsEditor
             EditorGUILayout.EndScrollView();
 
 
-            if (GUILayout.Button("UPDATE CACHE"))
+            if (GUILayout.Button("DELETE CACHE"))
+            {
+                ScriptableObjectUtility.DeleteAsset(AssetSave);
+            }
+            if (GUILayout.Button("CREATE CACHE"))
             {
                 gmp.UpdateCache(LoadAllPrefab());
                 ScriptableObjectUtility.WriteAsset(gmp, AssetSave);
             }
-
         }
 
         private static List<PrefabCacher.PrefabCache> LoadAllPrefab()

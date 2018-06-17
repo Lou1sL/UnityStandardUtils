@@ -6,10 +6,14 @@ namespace UnityStandardUtilsEditor
 {
     public static class ScriptableObjectUtility
     {
+        public static bool DeleteAsset(string path)
+        {
+            return AssetDatabase.DeleteAsset(path);
+        }
+
+
         public static bool WriteAsset<T>(T so,string path) where T : ScriptableObject
         {
-            if (AssetDatabase.Contains(so)) return false;
-
             AssetDatabase.CreateAsset(so, path);
             
             AssetDatabase.SaveAssets();

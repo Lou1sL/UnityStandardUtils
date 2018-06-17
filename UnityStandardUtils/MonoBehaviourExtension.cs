@@ -31,7 +31,7 @@ namespace UnityStandardUtils
             }
 
             string s = pc.GetPath(go);
-            if(s!=null)Debug.LogError("Can't find Prefab!");
+            if(s==null)Debug.LogError("Can't find Prefab!");
             return s;
         }
 

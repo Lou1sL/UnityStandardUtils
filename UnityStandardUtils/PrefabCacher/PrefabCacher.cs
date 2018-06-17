@@ -29,7 +29,9 @@ namespace UnityStandardUtils
         {
             foreach (PrefabCache pc in AllPrefab)
             {
-                if (ReferenceEquals(go, pc.gameObject)) return pc.path;
+                PrefabIdentity pi1 = go.GetComponent<PrefabIdentity>();
+                PrefabIdentity pi2 = pc.gameObject.GetComponent<PrefabIdentity>();
+                if (pi1.MyPath == pi2.MyPath) return pc.path;
             }
             return null;
         }

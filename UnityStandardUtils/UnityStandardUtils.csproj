@@ -60,7 +60,8 @@
     <Compile Include="InventoryManager.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="MonoBehaviourExtension.cs" />
-    <Compile Include="PrefabCacher.cs" />
+    <Compile Include="PrefabCacher\PrefabCacher.cs" />
+    <Compile Include="PrefabCacher\PrefabIdentity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="SaveManager.cs" />

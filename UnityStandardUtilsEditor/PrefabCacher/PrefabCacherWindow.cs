@@ -69,6 +69,10 @@ namespace UnityStandardUtilsEditor
                 GameObject go = EditorExtension.LoadPrefabPath(path);
                 if (go)
                 {
+                    PrefabIdentity pi = go.GetComponent<PrefabIdentity>();
+                    if (!pi) pi = go.AddComponent<PrefabIdentity>();
+
+                    pi.MyPath = path;
                     prefab.Add(new PrefabCacher.PrefabCache() { path = path, gameObject = go });
                 }
             }

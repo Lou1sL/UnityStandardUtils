@@ -11,7 +11,7 @@ namespace UnityStandardUtilsEditor
     {
         static string AssetSave = "Assets/Resources/PrefabLocationCache.asset";
 
-        static PrefabCacher gmp;
+        static PrefabCacher gmp = null;
 
         Vector2 scrollPos;
 
@@ -26,30 +26,40 @@ namespace UnityStandardUtilsEditor
             gmp = ScriptableObjectUtility.ReadAsset<PrefabCacher>(AssetSave);
         }
 
+        
         void OnGUI()
         {
-
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 4 * EditorGUIUtility.singleLineHeight));
-
-            GUILayout.Label("Cached Prefabs:" + gmp.GetAllPrefab().Count, GUILayout.Width(EditorGUIUtility.labelWidth));
-
-            foreach (PrefabCacher.PrefabCache pc in gmp.GetAllPrefab())
+            if (Application.isPlaying)
             {
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(pc.gameObject.name, GUILayout.Width(EditorGUIUtility.labelWidth));
-                GUILayout.Label(pc.path, GUILayout.Width(position.width * 0.97f - EditorGUIUtility.labelWidth));
-                EditorGUILayout.EndHorizontal();
+                GUILayout.Label("Please exit Play Mode then reopen this window.", GUILayout.Width(position.width));
+                return;
             }
 
-            EditorGUILayout.EndScrollView();
 
-
-            if (GUILayout.Button("DELETE CACHE"))
+            if (gmp != null)
             {
-                ScriptableObjectUtility.DeleteAsset(AssetSave);
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 2 * EditorGUIUtility.singleLineHeight));
+
+                GUILayout.Label("Cached Prefabs:" + gmp.GetAllPrefab().Count, GUILayout.Width(EditorGUIUtility.labelWidth));
+
+                foreach (PrefabCacher.PrefabCache pc in gmp.GetAllPrefab())
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label(pc.gameObject.name, GUILayout.Width(EditorGUIUtility.labelWidth));
+                    GUILayout.Label(pc.path, GUILayout.Width(position.width * 0.97f - EditorGUIUtility.labelWidth));
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                EditorGUILayout.EndScrollView();
             }
+            
+
+            
             if (GUILayout.Button("CREATE CACHE"))
             {
+                gmp = new PrefabCacher();
+                ScriptableObjectUtility.DeleteAsset(AssetSave);
+
                 gmp.UpdateCache(LoadAllPrefab());
                 ScriptableObjectUtility.WriteAsset(gmp, AssetSave);
             }

@@ -56,10 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crypto.cs" />
+    <Compile Include="Extension\ObjectExtension.cs" />
     <Compile Include="InputController.cs" />
     <Compile Include="InventoryManager.cs" />
     <Compile Include="Localization.cs" />
-    <Compile Include="MonoBehaviourExtension.cs" />
+    <Compile Include="Extension\MonoBehaviourExtension.cs" />
     <Compile Include="PrefabCacher\PrefabCacher.cs" />
     <Compile Include="PrefabCacher\PrefabIdentity.cs" />
     <Compile Include="PrefabField.cs" />
@@ -68,8 +69,8 @@
     <Compile Include="SaveManager.cs" />
     <Compile Include="SceneField.cs" />
     <Compile Include="SceneLoader.cs" />
-    <Compile Include="Singleton.cs" />
-    <Compile Include="VecTool.cs" />
+    <Compile Include="Extension\SingletonExtension.cs" />
+    <Compile Include="Extension\VectorExtension.cs" />
     <Compile Include="Web\HttpRequest.cs" />
     <Compile Include="Web\RESTful.cs" />
   </ItemGroup>

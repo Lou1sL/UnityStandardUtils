@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
 
-namespace UnityStandardUtilsEditor
+namespace UnityStandardUtilsEditor.Extension
 {
 
 

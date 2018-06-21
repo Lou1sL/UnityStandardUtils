@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityStandardUtils;
+using UnityStandardUtilsEditor.Extension;
 
 namespace UnityStandardUtilsEditor
 {

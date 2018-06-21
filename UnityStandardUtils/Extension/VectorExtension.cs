@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 
-namespace UnityStandardUtils
+namespace UnityStandardUtils.Extension
 {
-    public class VecTool
+    public class VectorExtension
     {
 
         public static Matrix4x4 ScreenToWorldMatrix(Camera cam)
@@ -63,19 +63,7 @@ namespace UnityStandardUtils
         {
             return Quaternion.Euler(eularAngles) * (basic == null ? Vector3.right : (Vector3)basic);
         }
-
-        public static void SetLossyScale(Transform transform, Vector3 lossyScale)
-        {
-            Vector3 scale = lossyScale;
-
-            Transform p = transform.parent;
-            while (p)
-            {
-                //TODO
-            }
-
-        }
-
+        
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace UnityStandardUtils
+namespace UnityStandardUtils.Extension
 {
     public class Singleton<T> where T : new()
     {

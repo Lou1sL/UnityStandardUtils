@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace UnityStandardUtilsEditor
+namespace UnityStandardUtilsEditor.Extension
 {
 
-    public class GizmosTool
+    public class GizmosExtension
     {
         public static void Text(GUISkin guiSkin, string text, Vector3 position, Color? color = null, int fontSize = 0, float yOffset = 0)
         {

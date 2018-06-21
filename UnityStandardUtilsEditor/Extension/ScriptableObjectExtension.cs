@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityStandardUtilsEditor
+namespace UnityStandardUtilsEditor.Extension
 {
-    public static class ScriptableObjectUtility
+    public static class ScriptableObjectExtension
     {
         public static bool DeleteAsset(string path)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityStandardUtils;
-using UnityStandardUtilsEditor;
+using UnityStandardUtilsEditor.Extension;
 
 namespace UnityStandardUtilsEditor
 {
@@ -23,7 +23,7 @@ namespace UnityStandardUtilsEditor
 
             window.titleContent = new GUIContent("PrefebCacher");
 
-            gmp = ScriptableObjectUtility.ReadAsset<PrefabCacher>(AssetSave);
+            gmp = ScriptableObjectExtension.ReadAsset<PrefabCacher>(AssetSave);
         }
 
         
@@ -58,10 +58,10 @@ namespace UnityStandardUtilsEditor
             if (GUILayout.Button("CREATE CACHE"))
             {
                 gmp = new PrefabCacher();
-                ScriptableObjectUtility.DeleteAsset(AssetSave);
+                ScriptableObjectExtension.DeleteAsset(AssetSave);
 
                 gmp.UpdateCache(LoadAllPrefab());
-                ScriptableObjectUtility.WriteAsset(gmp, AssetSave);
+                ScriptableObjectExtension.WriteAsset(gmp, AssetSave);
             }
         }
 

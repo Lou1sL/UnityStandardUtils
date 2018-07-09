@@ -63,7 +63,7 @@
     <Compile Include="Extension\MonoBehaviourExtension.cs" />
     <Compile Include="PrefabCacher\PrefabCacher.cs" />
     <Compile Include="PrefabCacher\PrefabIdentity.cs" />
-    <Compile Include="PrefabField.cs" />
+    <Compile Include="PrefabCacher\PrefabField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="SaveManager.cs" />

@@ -19,7 +19,7 @@ namespace UnityStandardUtils
         {
             try
             {
-                Init(Environment.CurrentDirectory + "/Localization/", "zh-CN");
+                Init(Environment.CurrentDirectory + "/StreamingAssets/Localization/", "zh-CN");
             }catch(Exception e)
             {
                 Console.WriteLine("Localization default Init FAILED\nPlease Init manually:)\n"+e.Message);

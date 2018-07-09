@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityStandardUtils", "Unity
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityStandardUtilsEditor", "UnityStandardUtilsEditor\UnityStandardUtilsEditor.csproj", "{A9D6D206-1F43-498F-9B6A-51D883BBF197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationEditor", "LocalizationEditor\LocalizationEditor.csproj", "{EE4FAF9C-5A54-49DD-B766-4EE532C1E415}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationEditor", "LocalizationEditor\LocalizationEditor.csproj", "{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{A9D6D206-1F43-498F-9B6A-51D883BBF197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9D6D206-1F43-498F-9B6A-51D883BBF197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9D6D206-1F43-498F-9B6A-51D883BBF197}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE4FAF9C-5A54-49DD-B766-4EE532C1E415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE4FAF9C-5A54-49DD-B766-4EE532C1E415}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE4FAF9C-5A54-49DD-B766-4EE532C1E415}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE4FAF9C-5A54-49DD-B766-4EE532C1E415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBE0A1C-D43A-4A2A-ADF9-4239B8125E00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

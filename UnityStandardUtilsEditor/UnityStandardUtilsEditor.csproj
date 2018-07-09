@@ -58,7 +58,7 @@
     <Compile Include="Extension\EditorExtension.cs" />
     <Compile Include="Extension\GizmosExtension.cs" />
     <Compile Include="PrefabCacher\PrefabCacherWindow.cs" />
-    <Compile Include="PrefabFieldPropertyDrawer.cs" />
+    <Compile Include="PrefabCacher\PrefabFieldPropertyDrawer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyAttribute.cs" />
     <Compile Include="SceneFieldPropertyDrawer.cs" />

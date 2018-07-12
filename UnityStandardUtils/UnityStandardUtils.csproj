@@ -58,17 +58,14 @@
     <Compile Include="Crypto.cs" />
     <Compile Include="Extension\ObjectExtension.cs" />
     <Compile Include="InputController.cs" />
-    <Compile Include="InventoryManager.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Extension\MonoBehaviourExtension.cs" />
     <Compile Include="PrefabCacher\PrefabCacher.cs" />
     <Compile Include="PrefabCacher\PrefabIdentity.cs" />
     <Compile Include="PrefabCacher\PrefabField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomGenerator.cs" />
     <Compile Include="SaveManager.cs" />
     <Compile Include="SceneField.cs" />
-    <Compile Include="SceneLoader.cs" />
     <Compile Include="Extension\SingletonExtension.cs" />
     <Compile Include="Extension\VectorExtension.cs" />
     <Compile Include="Web\HttpRequest.cs" />

@@ -1,4 +1,4 @@
-﻿# UnityStandardUtils
+# UnityStandardUtils
 
 
 Unity基础工具库
@@ -32,12 +32,14 @@ Web:
 
 PrefabCacher:
 
+让运行期也能轻易的通过Build前路径加载/获得Build前路径
+亦可判断该物品是否是由Prefab Instantiate而来
+
 * PrefabField 预制件也可以作为变量啦！
 
 * Prefab的管理与动态加载
 
-让运行期也能轻易的通过Build前路径加载/获得Build前路径
-亦可判断该物品是否是由Prefab Instantiate而来
+
 
 * 加密编解码
 

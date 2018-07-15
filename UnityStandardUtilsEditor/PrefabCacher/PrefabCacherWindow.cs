@@ -9,19 +9,19 @@ namespace UnityStandardUtilsEditor
 {
     public class PrefabCacherWindow : EditorWindow
     {
-        static string AssetSave = "Assets/Resources/PrefabLocationCache.asset";
+        private const string AssetSave = "Assets/Resources/PrefabLocationCache.asset";
 
-        static PrefabCacher gmp = null;
+        private static PrefabCacher gmp = null;
 
         Vector2 scrollPos;
 
-        [MenuItem("UnityStandardUtils/PrefebCacher")]
+        [MenuItem("UnityStandardUtils/Prefeb Cacher")]
         static void Init()
         {
             PrefabCacherWindow window = (PrefabCacherWindow)EditorWindow.GetWindow(typeof(PrefabCacherWindow));
             window.Show();
 
-            window.titleContent = new GUIContent("PrefebCacher");
+            window.titleContent = new GUIContent("Prefeb Cacher");
 
             gmp = ScriptableObjectExtension.ReadAsset<PrefabCacher>(AssetSave);
         }
@@ -55,7 +55,7 @@ namespace UnityStandardUtilsEditor
             
 
             
-            if (GUILayout.Button("CREATE CACHE"))
+            if (GUILayout.Button("UPDATE CACHE"))
             {
                 gmp = new PrefabCacher();
                 ScriptableObjectExtension.DeleteAsset(AssetSave);

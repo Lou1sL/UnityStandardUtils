@@ -31,5 +31,12 @@ namespace UnityStandardUtilsEditor.Extension
             if(!t)t = ScriptableObject.CreateInstance<T>();
             return t;
         }
+
+        public static void SaveAsset()
+        {
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
+        }
     }
 }

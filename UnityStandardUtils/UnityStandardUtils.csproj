@@ -55,6 +55,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGMManager\BGMListCacher.cs" />
+    <Compile Include="BGMManager\BGMPlayer.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Extension\ObjectExtension.cs" />
     <Compile Include="InputController.cs" />
@@ -71,5 +73,6 @@
     <Compile Include="Web\HttpRequest.cs" />
     <Compile Include="Web\RESTful.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

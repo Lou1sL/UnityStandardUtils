@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\unity\AI0x10\AI0x10\Assets\Main\Plugin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGMManager\BGMManagerWindow.cs" />
     <Compile Include="Extension\EditorExtension.cs" />
     <Compile Include="Extension\GizmosExtension.cs" />
     <Compile Include="PrefabCacher\PrefabCacherWindow.cs" />

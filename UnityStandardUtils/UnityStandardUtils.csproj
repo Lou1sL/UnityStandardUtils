@@ -70,6 +70,8 @@
     <Compile Include="SceneField.cs" />
     <Compile Include="Extension\SingletonExtension.cs" />
     <Compile Include="Extension\VectorExtension.cs" />
+    <Compile Include="SuicideGO\Suicide.cs" />
+    <Compile Include="SuicideGO\SuicideGOCreator.cs" />
     <Compile Include="Web\HttpRequest.cs" />
     <Compile Include="Web\RESTful.cs" />
   </ItemGroup>

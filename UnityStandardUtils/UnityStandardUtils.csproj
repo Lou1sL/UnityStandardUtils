@@ -66,6 +66,7 @@
     <Compile Include="InputController.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Extension\MonoBehaviourExtension.cs" />
+    <Compile Include="PauseManager.cs" />
     <Compile Include="PrefabCacher\PrefabCacher.cs" />
     <Compile Include="PrefabCacher\PrefabIdentity.cs" />
     <Compile Include="PrefabCacher\PrefabField.cs" />

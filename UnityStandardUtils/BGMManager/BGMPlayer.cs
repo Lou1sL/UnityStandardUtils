@@ -26,6 +26,7 @@ namespace UnityStandardUtils
                 if (bc.Tag == tag)
                 {
                     Instance.au.clip = bc.Audio;
+                    Stop();
                     Play();
                     return;
                 }
@@ -44,11 +45,20 @@ namespace UnityStandardUtils
             Instance.au.Pause();
         }
 
+        public static void Stop()
+        {
+            Instance.au.Stop();
+        }
+
         public static float Volume
         {
             get { return Instance.au.volume; }
             set { Instance.au.volume = value; }
         }
 
+        public static AudioSource audioSource
+        {
+            get { return Instance.au; }
+        }
     }
 }

@@ -53,8 +53,12 @@
     <Reference Include="UnityEngine">
       <HintPath>..\Reference\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\Reference\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoScrollbar.cs" />
     <Compile Include="BGMManager\BGMListCacher.cs" />
     <Compile Include="BGMManager\BGMPlayer.cs" />
     <Compile Include="Crypto.cs" />

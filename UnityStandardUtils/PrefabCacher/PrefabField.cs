@@ -39,7 +39,7 @@ namespace UnityStandardUtils
 
         public static implicit operator GameObject(PrefabField p)
         {
-            return MonoBehaviourExtension.LoadPrefabPath(p.prefabPath);
+            return MonoBehaviourExtension.LoadPrefab(p.prefabPath);
         }
 
         public override bool Equals(object obj)
@@ -57,7 +57,6 @@ namespace UnityStandardUtils
         {
             // TODO: write your implementation of GetHashCode() here
             throw new System.NotImplementedException();
-            return base.GetHashCode();
         }
         
         public string path
@@ -76,11 +75,11 @@ namespace UnityStandardUtils
         {
             get
             {
-                return MonoBehaviourExtension.LoadPrefabPath(prefabPath);
+                return MonoBehaviourExtension.LoadPrefab(prefabPath);
             }
             set
             {
-                prefabPath = MonoBehaviourExtension.GetPrefabPath(value);
+                prefabPath = MonoBehaviourExtension.GetPrefab(value);
             }
         }
 

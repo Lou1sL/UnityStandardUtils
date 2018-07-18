@@ -20,7 +20,7 @@ namespace UnityStandardUtils.Extension
             else onend?.Invoke();
         }
 
-        public static string GetPrefabPath(GameObject go)
+        public static PrefabField GetPrefab(GameObject go)
         {
             if (!go) return null;
 
@@ -32,10 +32,13 @@ namespace UnityStandardUtils.Extension
 
             string s = pc.GetPath(go);
             if(s==null)Debug.LogError("Can't find Prefab!");
-            return s;
+            PrefabField pf = new PrefabField();
+            pf.path = s;
+
+            return pf;
         }
 
-        public static GameObject LoadPrefabPath(string path)
+        public static GameObject LoadPrefab(string path)
         {
             if (path == null || path == string.Empty) return null;
 

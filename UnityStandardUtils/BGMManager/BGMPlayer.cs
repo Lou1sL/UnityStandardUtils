@@ -24,8 +24,11 @@ namespace UnityStandardUtils
             au = GetComponent<AudioSource>();
             
             au.clip = null;
-            au.playOnAwake = true;
+            au.playOnAwake = false;
             au.loop = true;
+            au.Stop();
+            au.volume = 0f;
+
         }
 
         public static void Play(string tag,bool isReplayIfSame = true)
@@ -44,9 +47,9 @@ namespace UnityStandardUtils
                             return;
                         }
                     }
-                    Stop();
+                    Instance.au.volume = 0f;
                     Instance.au.clip = bc.Audio;
-                    Play();
+                    Status = PlayerStatus.Playing;
 
                     return;
                 }
@@ -79,10 +82,17 @@ namespace UnityStandardUtils
             Status = PlayerStatus.Stopped;
         }
 
+        //Editor Crash
+        //public static float Volume
+        //{
+        //    get { return Volume; }
+        //    set { Volume = value; Instance.au.volume = value; }
+        //}
+        private static float _Volume;
         public static float Volume
         {
-            get { return Volume; }
-            set { Volume = value; Instance.au.volume = value; }
+            get { return _Volume; }
+            set { _Volume = value; }
         }
 
         public static AudioSource audioSource
@@ -98,41 +108,35 @@ namespace UnityStandardUtils
 
                     if (!au.isPlaying)
                     {
-                        au.Play();
                         au.volume = 0f;
+                        au.Play();
                     }
-
-                    if (au.volume < Volume) au.volume += 0.5f * Time.deltaTime;
-                    else au.volume = Volume;
+                    if (au.volume < _Volume) au.volume += 0.5f * Time.deltaTime;
+                    else au.volume = _Volume;
                     break;
 
                 case PlayerStatus.Paused:
 
-                    if (au.isPlaying)
+                    if (au.volume > 0f) au.volume -= 0.5f * Time.deltaTime;
+                    else
                     {
-                        if (au.volume > 0f) au.volume -= 0.5f * Time.deltaTime;
-                        else
-                        {
-                            au.Pause();
-                            au.volume = 0f;
-                        }
+                        au.Pause();
+                        au.volume = 0f;
                     }
+
                     break;
 
                 case PlayerStatus.Stopped:
 
-                    if (au.isPlaying)
+                    if (au.volume > 0f) au.volume -= 0.5f * Time.deltaTime;
+                    else
                     {
-                        if (au.volume > 0f) au.volume -= 0.5f * Time.deltaTime;
-                        else
-                        {
-                            au.Stop();
-                            au.clip = null;
-                            au.volume = 0f;
-                        }
+                        au.Stop();
+                        au.clip = null;
+                        au.volume = 0f;
                     }
 
-                    
+
                     break;
             }
         }

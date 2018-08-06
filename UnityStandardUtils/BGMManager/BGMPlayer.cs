@@ -13,7 +13,7 @@ namespace UnityStandardUtils
             Stopped,
         }
         public static PlayerStatus Status { get; private set; } = PlayerStatus.Stopped;
-
+        public static string PlayingTag { get; private set; } = string.Empty;
         [SerializeField]
         private BGMListCacher BGMList;
         private AudioSource au;
@@ -50,6 +50,8 @@ namespace UnityStandardUtils
                     Instance.au.volume = 0f;
                     Instance.au.clip = bc.Audio;
                     Status = PlayerStatus.Playing;
+
+                    PlayingTag = tag;
 
                     return;
                 }
@@ -106,13 +108,9 @@ namespace UnityStandardUtils
             {
                 case PlayerStatus.Playing:
 
-                    if (!au.isPlaying)
-                    {
-                        au.volume = 0f;
-                        au.Play();
-                    }
-                    if (au.volume < _Volume) au.volume += 0.5f * Time.deltaTime;
-                    else au.volume = _Volume;
+                    if (!au.isPlaying) au.Play();
+                    au.volume = _Volume;
+
                     break;
 
                 case PlayerStatus.Paused:
@@ -127,6 +125,8 @@ namespace UnityStandardUtils
                     break;
 
                 case PlayerStatus.Stopped:
+
+                    PlayingTag = string.Empty;
 
                     if (au.volume > 0f) au.volume -= 0.5f * Time.deltaTime;
                     else

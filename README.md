@@ -35,7 +35,7 @@ PrefabCacher:
 让运行期也能轻易的通过Build前路径加载/获得Build前路径
 亦可判断该物品是否是由Prefab Instantiate而来
 
-* PrefabField 预制件也可以作为变量啦！
+* PrefabField 预制件也可以作为变量
 
 * Prefab的管理与动态加载
 
@@ -49,7 +49,7 @@ PrefabCacher:
 
 * 语言本地化及对应的可视化编辑器
 
-* Scene 也可以做变量啦！
+* Scene 也可以做变量
 
 
 ---
@@ -63,5 +63,3 @@ UnityStandardUtilsEditor 是Editor专用的库，请在ImportSettings中只勾�
 [具体使用方法请查看Wiki](https://github.com/RyuBAI/UnityStandardUtils/wiki)
 ---
 
-
-欢迎fork
